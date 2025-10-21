@@ -506,6 +506,21 @@
     <child
       link="core_embedded_imu_link" />
   </joint>
+  
+  <gazebo reference="core_embedded_imu_link">
+    <material>
+      <ambient>"0.1 0.1 0.1 1"</ambient>
+      <diffuse>"0.1 0.1 0.1 1"</diffuse>
+      <specular>"0.1 0.1 0.1 1"</specular>
+    </material>
+    <sensor name="core_emb_imu_sensor" type="imu">
+      <topic>'imu/data'</topic>
+      <update_rate>15.0</update_rate>
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+      <gz_frame_id>core_embedded_imu_link</gz_frame_id>
+    </sensor>
+  </gazebo>
 
   <!-- CORE GPS ANTENNA LINK -->
   <link name="core_gps_antenna_link">  <!-- Name subject to change-->
