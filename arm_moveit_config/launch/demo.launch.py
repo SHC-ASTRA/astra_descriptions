@@ -35,13 +35,6 @@ def generate_launch_description():
     ld = LaunchDescription()
     ld.add_action(
         DeclareBooleanLaunchArg(
-            "db",
-            default_value=False,
-            description="By default, we do not start a database (it can be large)",
-        )
-    )
-    ld.add_action(
-        DeclareBooleanLaunchArg(
             "debug",
             default_value=False,
             description="By default, we are not in debug mode",
@@ -84,16 +77,6 @@ def generate_launch_description():
                 str(launch_package_path / "launch/moveit_rviz.launch.py")
             ),
             condition=IfCondition(LaunchConfiguration("use_rviz")),
-        )
-    )
-
-    # If database loading was enabled, start mongodb as well
-    ld.add_action(
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                str(launch_package_path / "launch/warehouse_db.launch.py")
-            ),
-            condition=IfCondition(LaunchConfiguration("db")),
         )
     )
 
