@@ -1,4 +1,5 @@
 from moveit_configs_utils import MoveItConfigsBuilder
+
 # from moveit_configs_utils.launches import generate_demo_launch
 
 import os
@@ -28,7 +29,9 @@ from launch_ros.descriptions import ComposableNode
 
 
 def generate_launch_description():
-    moveit_config = MoveItConfigsBuilder("ASTRA_Arm", package_name="arm_moveit_config").to_moveit_configs()
+    moveit_config = MoveItConfigsBuilder(
+        "ASTRA_Arm", package_name="arm_moveit_config"
+    ).to_moveit_configs()
     # return generate_demo_launch(moveit_config)
     launch_package_path = moveit_config.package_path
 
@@ -171,7 +174,6 @@ def generate_launch_description():
             output="screen",
         )
     )
-
 
     ld.add_action(
         IncludeLaunchDescription(
