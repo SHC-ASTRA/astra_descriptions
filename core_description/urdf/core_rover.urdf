@@ -463,4 +463,105 @@
       xyz="1 0 0" />
   </joint>
 
+  <!-- SENSORS -->
+
+  <!-- CORE EMBEDDED IMU LINK -->
+  <link name="core_embedded_imu_link">  <!-- Name subject to change-->
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.003" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <box
+          size="0.02 0.027 0.004" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.0 0.0 1.0 1" />
+      </material>
+    </visual>
+  </link>
+
+  <joint name="core_embedded_imu_joint" type="fixed">
+    <origin
+      xyz="0 -0.26 0"
+      rpy="0 0 -1.5707963267948966" />
+    <parent
+      link="base_link" />
+    <child
+      link="core_embedded_imu_link" />
+  </joint>
+  
+  <gazebo reference="core_embedded_imu_link">
+    <material>
+      <ambient>"0.1 0.1 0.1 1"</ambient>
+      <diffuse>"0.1 0.1 0.1 1"</diffuse>
+      <specular>"0.1 0.1 0.1 1"</specular>
+    </material>
+    <sensor name="core_emb_imu_sensor" type="imu">
+      <topic>'imu/data'</topic>
+      <update_rate>15.0</update_rate>
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+      <gz_frame_id>core_embedded_imu_link</gz_frame_id>
+    </sensor>
+  </gazebo>
+
+  <!-- CORE GPS ANTENNA LINK -->
+  <link name="core_gps_antenna_link">  <!-- Name subject to change-->
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.05" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <box
+          size="0.05 0.05 0.02" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1.0 0.0 0.0 1" />
+      </material>
+    </visual>
+  </link>
+
+  <joint name="core_gps_antenna_joint" type="fixed">
+    <origin
+      xyz="0.25 0.475 0.6"
+      rpy="0 0 -1.5707963267948966" />
+    <parent
+      link="base_link" />
+    <child
+      link="core_gps_antenna_link" />
+  </joint>
+
 </robot>
