@@ -257,26 +257,19 @@ def generate_launch_description():
         package="ros_gz_sim",
         executable="create",
         output="screen",
-        arguments=[
-            "-topic",
-            "/robot_description",
-            "-name",
-            robot_name,
-            "-allow_renaming",
-            "true",
-            "-x",
-            x,
-            "-y",
-            y,
-            "-z",
-            z,
-            "-R",
-            roll,
-            "-P",
-            pitch,
-            "-Y",
-            yaw,
+        # fmt: off
+        arguments= [
+            "-topic", "/robot_description",
+            "-name", robot_name,
+            "-allow_renaming", "true",
+            "-x", x,
+            "-y", y,
+            "-z", z,
+            "-R", roll,
+            "-P", pitch,
+            "-Y", yaw,
         ],
+        # fmt: on
     )
 
     ################################################################################################
