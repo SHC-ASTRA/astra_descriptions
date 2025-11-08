@@ -252,24 +252,24 @@ def generate_launch_description():
         condition=IfCondition(use_camera),
     )
 
+    gz_args = [
+        ("-topic", "/robot_description"),
+        ("-name", robot_name),
+        ("-allow_renaming", "true"),
+        ("-x", x),
+        ("-y", y),
+        ("-z", z),
+        ("-R", roll),
+        ("-P", pitch),
+        ("-Y", yaw),
+    ]
+
     # Spawn the robot
     start_gazebo_ros_spawner_cmd = Node(
         package="ros_gz_sim",
         executable="create",
         output="screen",
-        # fmt: off
-        arguments= [
-            "-topic", "/robot_description",
-            "-name", robot_name,
-            "-allow_renaming", "true",
-            "-x", x,
-            "-y", y,
-            "-z", z,
-            "-R", roll,
-            "-P", pitch,
-            "-Y", yaw,
-        ],
-        # fmt: on
+        arguments=sum(gz_args, ()),  # ROS2 requires flat list for shell args
     )
 
     ################################################################################################
