@@ -24,12 +24,26 @@ astra_arm_controller:
     - Wrist_Differential_Joint
     - Wrist-EF_Roll_Joint
     command_interfaces:
-    - position
-    # - velocity
+    # - position
+    - velocity
     state_interfaces:
     - position
     - velocity
     allow_nonzero_velocity_at_trajectory_end: true
+    gains:
+      Axis_0_Joint:
+        ff_velocity_scale: 1.0
+      Axis_1_Joint:
+        ff_velocity_scale: 1.0
+      Axis_2_Joint:
+        ff_velocity_scale: 1.0
+      Axis_3_Joint:
+        ff_velocity_scale: 1.0
+      Wrist_Differential_Joint:
+        ff_velocity_scale: 1.0
+      Wrist-EF_Roll_Joint:
+        ff_velocity_scale: 1.0
+
 hand_controller:
   ros__parameters:
     joint: Gripper_Slider_Left
