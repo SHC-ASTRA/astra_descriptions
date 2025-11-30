@@ -32,7 +32,10 @@ def generate_launch_description():
         "moveit_simple_controller_manager", {}
     ).get("controller_names", [])
     ld = LaunchDescription()
-    for controller in controller_names:  # + ["joint_state_broadcaster"]:
+
+    controller_names += ["joint_state_broadcaster"]
+
+    for controller in controller_names:
         ld.add_action(
             Node(
                 package="controller_manager",

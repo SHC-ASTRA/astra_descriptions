@@ -25,11 +25,11 @@ astra_arm_controller:
     - Wrist-EF_Roll_Joint
     command_interfaces:
     - position
-    - velocity
+    # - velocity
     state_interfaces:
     - position
     - velocity
-    allow_nonzero_velocity_at_trajectory_end: false
+    allow_nonzero_velocity_at_trajectory_end: true
 hand_controller:
   ros__parameters:
     joint: Gripper_Slider_Left
