@@ -12,6 +12,7 @@ This package contains URDF, configuration, and launch files to support controlli
   - [Running](#running)
     - [Switching between sim and real hardware](#switching-between-sim-and-real-hardware)
 - [File Structure](#file-structure)
+- [Graphs](#graphs)
 - [Maintainer(s)](#maintainers)
 
 ## Software Prerequisites
@@ -141,6 +142,13 @@ def generate_launch_description():
    - **demo.launch.py** - Launches everything for Moveit2 using the other launch files in the same folder, including static_transform_publisher, robot_state_publisher, rviz2, Moveit2 core binaries, moveit_servo, ros2_control, and ros2_joy
    - **spawn_controllers.launch.py** - Launches all ros2 controllers for Moveit2
 
+## Graphs
+
+> Moveit2 with ros2_joy and real hardware (Anchor)
+![rqt_graph of Moveit2 controlled by ros2_joy and hooked up to Anchor](./graph-moveit2-real-hardware-w-anchor.png)
+
+> Moveit2 with ros2_joy and fake hardware (mock_components)
+![rqt_graph of Moveit2 controlled by ros2_joy with mock_components fake simulated hardware](./graph-moveit2-fake-hw.png)
 ## Maintainer(s)
 
 | Name | Email | Discord |
