@@ -33,7 +33,7 @@ def generate_launch_description():
     ).get("controller_names", [])
     ld = LaunchDescription()
 
-    controller_names += ["joint_state_broadcaster"]
+    # controller_names += ["joint_state_broadcaster"]
 
     for controller in controller_names:
         ld.add_action(
