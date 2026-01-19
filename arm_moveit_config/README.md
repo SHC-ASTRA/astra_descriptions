@@ -144,10 +144,10 @@ def generate_launch_description():
 
 ## Graphs
 
-> Moveit2 with ros2_joy and real hardware (Anchor)
+> Moveit2 with ros2_joy and real hardware (Anchor and Headless)
 ![rqt_graph of Moveit2 controlled by ros2_joy and hooked up to Anchor](./graph-moveit2-real-hardware-w-anchor.png)
 
-> Moveit2 with ros2_joy and fake hardware (mock_components)
+> Moveit2 with ros2_joy and fake hardware (mock_components and Headless)
 ![rqt_graph of Moveit2 controlled by ros2_joy with mock_components fake simulated hardware](./graph-moveit2-fake-hw.png)
 ## Maintainer(s)
 
