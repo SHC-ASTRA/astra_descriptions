@@ -10,7 +10,7 @@ from launch.actions import (
 )
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PythonExpression
 
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
@@ -31,9 +31,35 @@ def generate_launch_description():
     controller_names = moveit_config.trajectory_execution.get(
         "moveit_simple_controller_manager", {}
     ).get("controller_names", [])
+
     ld = LaunchDescription()
 
-    # controller_names += ["joint_state_broadcaster"]
+    ld.add_action(
+        DeclareLaunchArgument(
+            "hardware_mode",
+            default_value="mock_components",
+            description="Hardware mode: 'mock_components' for simulation, 'physical' for real hardware",
+        )
+    )
+
+    # Spawn joint_state_broadcaster only when using simulated hardware (mock_components)
+    ld.add_action(
+        Node(
+            package="controller_manager",
+            executable="spawner",
+            arguments=["joint_state_broadcaster"],
+            output="screen",
+            condition=IfCondition(
+                PythonExpression(
+                    [
+                        "'",
+                        LaunchConfiguration("hardware_mode"),
+                        "' == 'mock_components'",
+                    ]
+                )
+            ),
+        )
+    )
 
     for controller in controller_names:
         ld.add_action(

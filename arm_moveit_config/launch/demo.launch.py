@@ -44,6 +44,13 @@ def generate_launch_description():
         )
     )
     ld.add_action(DeclareBooleanLaunchArg("use_rviz", default_value=True))
+    ld.add_action(
+        DeclareLaunchArgument(
+            "hardware_mode",
+            default_value="mock_components",
+            description="Hardware mode: 'mock_components' for simulation, 'physical' for real hardware",
+        )
+    )
     # If there are virtual joints, broadcast static tf by including virtual_joints launch
     virtual_joints_launch = (
         launch_package_path / "launch/static_virtual_joint_tfs.launch.py"
@@ -62,6 +69,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(
                 str(launch_package_path / "launch/rsp.launch.py")
             ),
+            launch_arguments=[("hardware_mode", LaunchConfiguration("hardware_mode"))],
         )
     )
 
@@ -163,6 +171,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(
                 str(launch_package_path / "launch/spawn_controllers.launch.py")
             ),
+            launch_arguments=[("hardware_mode", LaunchConfiguration("hardware_mode"))],
         )
     )
 
