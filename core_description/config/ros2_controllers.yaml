@@ -1,6 +1,6 @@
 controller_manager:
   ros__parameters:
-    update_rate: 100
+    update_rate: 50
 
     diff_controller:
       type: diff_drive_controller/DiffDriveController
@@ -29,6 +29,6 @@ diff_controller:
     publish_limited_velocity: false
 
     use_stamped_vel: false
-    publish_rate: 100.0
+    publish_rate: 50.0
 
     # TODO: add reasonable velocity and acceleration limits
