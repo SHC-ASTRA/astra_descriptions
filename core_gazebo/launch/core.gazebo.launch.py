@@ -64,16 +64,13 @@ def generate_launch_description():
 
     # ROS2 Controller Manager
     ld.add_action(
-        Node(
-            package="controller_manager",
-            executable="spawner",
-            arguments=[
-                "joint_broadcaster",
-                "diff_controller",
-                "--controller-manager-timeout",
-                "10",
-            ],
-            output="screen",
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                PathJoinSubstitution(
+                    [pkg_share_description, "launch", "spawn_controllers.launch.py"]
+                )
+            ),
+            launch_arguments={("hardware_mode", "gazebo")},
         )
     )
 
