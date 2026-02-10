@@ -26,6 +26,14 @@ def generate_launch_description():
         )
     )
 
+    ld.add_action(
+        DeclareLaunchArgument(
+            name="spawn_rsp",
+            default_value="false",
+            description="Whether to spawn the robot state publisher node."
+        )
+    )
+
     # Launch Nodes
 
     # Joint State Publisher GUI - publish and graphically modify joint states
@@ -47,6 +55,7 @@ def generate_launch_description():
                 )
             ),
             launch_arguments={("hardware_mode", LaunchConfiguration("hardware_mode"))},
+            condition=IfCondition(LaunchConfiguration("spawn_rsp")),
         )
     )
 

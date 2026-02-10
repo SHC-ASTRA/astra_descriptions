@@ -58,7 +58,7 @@ def generate_launch_description():
                     [pkg_share_description, "launch", "display.launch.py"]
                 )
             ),
-            launch_arguments={("hardware_mode", "gazebo")},
+            launch_arguments={("hardware_mode", "gazebo"), ("spawn_rsp", "true")},
         )
     )
 
@@ -83,7 +83,6 @@ def generate_launch_description():
             "GZ_SIM_RESOURCE_PATH", os.path.dirname(pkg_share_description)
         )
     )
-
 
     # Gazebo
     world_path = PathJoinSubstitution(
@@ -126,7 +125,6 @@ def generate_launch_description():
             condition=IfCondition(LaunchConfiguration("use_camera")),
         )
     )
-
 
     # Spawn the robot in Gazebo
     gz_args = [
