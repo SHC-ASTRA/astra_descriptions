@@ -59,37 +59,37 @@ Visualization Manager:
       Enabled: true
       Links:
         All Links Enabled: true
-        Axis_0_Plate:
+        axis_0_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        Axis_1_Segment:
+        axis_1_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        Axis_2_Segment:
+        axis_2_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        Diff_Carrier:
+        wrist_differential_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        EF_Gripper_Left:
+        ef_gripper_left_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        EF_Gripper_Right:
+        ef_gripper_right_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        End_Effector:
+        ef_carrier_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -98,7 +98,7 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        Wrist:
+        wrist_box_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -121,21 +121,21 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        Axis_0_Plate:
+        axis_0_link:
           Value: true
-        Axis_1_Segment:
+        axis_1_link:
           Value: true
-        Axis_2_Segment:
+        axis_2_link:
           Value: true
-        Diff_Carrier:
+        wrist_differential_link:
           Value: true
-        EF_Gripper_Left:
+        ef_gripper_left_link:
           Value: true
-        EF_Gripper_Right:
+        ef_gripper_right_link:
           Value: true
-        End_Effector:
+        ef_carrier_link:
           Value: true
-        Wrist:
+        wrist_box_link:
           Value: true
         base_link:
           Value: true
@@ -146,15 +146,15 @@ Visualization Manager:
       Show Names: true
       Tree:
         base_link:
-          Axis_0_Plate:
-            Axis_1_Segment:
-              Axis_2_Segment:
-                Wrist:
-                  Diff_Carrier:
-                    End_Effector:
-                      EF_Gripper_Left:
+          axis_0_link:
+            axis_1_link:
+              axis_2_link:
+                wrist_box_link:
+                  wrist_differential_link:
+                    ef_carrier_link:
+                      ef_gripper_left_link:
                         {}
-                      EF_Gripper_Right:
+                      ef_gripper_right_link:
                         {}
       Update Interval: 0
       Value: true
