@@ -218,7 +218,7 @@
     <child
       link="axis_2_link" />
     <axis
-      xyz="0 -1 0" />
+      xyz="0 1 0" />
     <limit
       lower="-2.0"
       upper="2.0"
@@ -278,7 +278,7 @@
     <child
       link="wrist_box_link" />
     <axis
-      xyz="0 -1 0" />
+      xyz="0 1 0" />
     <limit
       lower="-1.6"
       upper="1.9"

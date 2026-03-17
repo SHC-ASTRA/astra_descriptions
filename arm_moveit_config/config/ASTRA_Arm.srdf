@@ -34,16 +34,16 @@
     <group_state name="Stow" group="astra_arm">
         <joint name="axis_0_joint" value="0"/>
         <joint name="axis_1_joint" value="-1.05"/>
-        <joint name="axis_2_joint" value="-2"/>
-        <joint name="axis_3_joint" value="-1.6"/>
+        <joint name="axis_2_joint" value="2"/>
+        <joint name="axis_3_joint" value="1.6"/>
         <joint name="wrist_roll_joint" value="0"/>
         <joint name="wrist_yaw_joint" value="0"/>
     </group_state>
     <group_state name="Ready" group="astra_arm">
         <joint name="axis_0_joint" value="0"/>
         <joint name="axis_1_joint" value="0"/>
-        <joint name="axis_2_joint" value="-1.6"/>
-        <joint name="axis_3_joint" value="-1.6"/>
+        <joint name="axis_2_joint" value="1.6"/>
+        <joint name="axis_3_joint" value="1.6"/>
         <joint name="wrist_roll_joint" value="0"/>
         <joint name="wrist_yaw_joint" value="0"/>
     </group_state>
