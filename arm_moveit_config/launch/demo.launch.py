@@ -44,6 +44,13 @@ def generate_launch_description():
         )
     )
     ld.add_action(DeclareBooleanLaunchArg("use_rviz", default_value=True))
+    ld.add_action(
+        DeclareLaunchArgument(
+            "hardware_mode",
+            default_value="mock_components",
+            description="Hardware mode: 'mock_components' for simulation, 'physical' for real hardware",
+        )
+    )
     # If there are virtual joints, broadcast static tf by including virtual_joints launch
     virtual_joints_launch = (
         launch_package_path / "launch/static_virtual_joint_tfs.launch.py"
@@ -62,6 +69,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(
                 str(launch_package_path / "launch/rsp.launch.py")
             ),
+            launch_arguments=[("hardware_mode", LaunchConfiguration("hardware_mode"))],
         )
     )
 
@@ -109,39 +117,6 @@ def generate_launch_description():
         .yaml("config/astra_arm_simulated_config.yaml")
         .to_dict()
     }
-    ld.add_action(
-        ComposableNodeContainer(
-            name="moveit_servo_demo_container",
-            namespace="/",
-            package="rclcpp_components",
-            executable="component_container_mt",
-            composable_node_descriptions=[
-                # Example of launching Servo as a node component
-                # Assuming ROS2 intraprocess communications works well, this is a more efficient way.
-                # ComposableNode(
-                #     package="moveit_servo",
-                #     plugin="moveit_servo::ServoServer",
-                #     name="servo_server",
-                #     parameters=[
-                #         servo_params,
-                #         moveit_config.robot_description,
-                #         moveit_config.robot_description_semantic,
-                #     ],
-                # ),
-                ComposableNode(
-                    package="servo_arm_twist_pkg",
-                    plugin="servo_arm_twist_pkg::JoyToServoPub",
-                    name="controller_to_servo_twist_node",
-                ),
-                ComposableNode(
-                    package="joy",
-                    plugin="joy::Joy",
-                    name="joy_node",
-                ),
-            ],
-            output="screen",
-        )
-    )
     # Launch a standalone Servo node.
     # As opposed to a node component, this may be necessary (for example) if Servo is running on a different PC
     ld.add_action(
@@ -163,6 +138,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(
                 str(launch_package_path / "launch/spawn_controllers.launch.py")
             ),
+            launch_arguments=[("hardware_mode", LaunchConfiguration("hardware_mode"))],
         )
     )
 

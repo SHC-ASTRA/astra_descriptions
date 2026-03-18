@@ -1,7 +1,7 @@
 # This config file is used by ros2_control
 controller_manager:
   ros__parameters:
-    update_rate: 100  # Hz
+    update_rate: 50  # Hz
 
     astra_arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
@@ -17,19 +17,33 @@ controller_manager:
 astra_arm_controller:
   ros__parameters:
     joints:
-    - Axis_0_Joint
-    - Axis_1_Joint
-    - Axis_2_Joint
-    - Axis_3_Joint
-    - Wrist_Differential_Joint
-    - Wrist-EF_Roll_Joint
+    - axis_0_joint
+    - axis_1_joint
+    - axis_2_joint
+    - axis_3_joint
+    - wrist_yaw_joint
+    - wrist_roll_joint
     command_interfaces:
-    - position
+    # - position
     - velocity
     state_interfaces:
     - position
     - velocity
-    allow_nonzero_velocity_at_trajectory_end: false
+    allow_nonzero_velocity_at_trajectory_end: true
+    gains:
+      axis_0_joint:
+        ff_velocity_scale: 1.0
+      axis_1_joint:
+        ff_velocity_scale: 1.0
+      axis_2_joint:
+        ff_velocity_scale: 1.0
+      axis_3_joint:
+        ff_velocity_scale: 1.0
+      wrist_yaw_joint:
+        ff_velocity_scale: 1.0
+      wrist_roll_joint:
+        ff_velocity_scale: 1.0
+
 hand_controller:
   ros__parameters:
-    joint: Gripper_Slider_Left
+    joint: ef_gripper_left_joint

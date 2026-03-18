@@ -47,7 +47,7 @@
   </link>
 
   <link
-    name="Axis_0_Plate">
+    name="axis_0_link">
     <inertial>
       <origin
         xyz="0.025635 0.047115 0.021109"
@@ -68,7 +68,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/Axis_0_Plate.STL" />
+          filename="package://arm_description/meshes/axis_0_link.STL" />
       </geometry>
       <material
         name="">
@@ -82,13 +82,13 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/Axis_0_Plate.STL" />
+          filename="package://arm_description/meshes/axis_0_link.STL" />
       </geometry>
     </collision>
   </link>
 
   <joint
-    name="Axis_0_Joint"
+    name="axis_0_joint"
     type="revolute">
     <origin
       xyz="0.018772 -0.020734 -0.04971"
@@ -96,7 +96,7 @@
     <parent
       link="base_link" />
     <child
-      link="Axis_0_Plate" />
+      link="axis_0_link" />
     <axis
       xyz="0 -1 0" />
     <limit
@@ -107,7 +107,7 @@
   </joint>
 
   <link
-    name="Axis_1_Segment">
+    name="axis_1_link">
     <inertial>
       <origin
         xyz="0.317731812584795 0.0226837932394467 -2.94234579792906E-05"
@@ -128,7 +128,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/Axis_1_Segment.STL" />
+          filename="package://arm_description/meshes/axis_1_link.STL" />
       </geometry>
       <material
         name="">
@@ -142,21 +142,21 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/Axis_1_Segment.STL" />
+          filename="package://arm_description/meshes/axis_1_link.STL" />
       </geometry>
     </collision>
   </link>
 
   <joint
-    name="Axis_1_Joint"
+    name="axis_1_joint"
     type="revolute">
     <origin
       xyz="-0.0271654135185528 0.0927245490180083 0.00384109909109076"
       rpy="-3.14159265358977 -0.00524713054608625 1.5707963267949" />
     <parent
-      link="Axis_0_Plate" />
+      link="axis_0_link" />
     <child
-      link="Axis_1_Segment" />
+      link="axis_1_link" />
     <axis
       xyz="0 -1 0" />
     <limit
@@ -167,7 +167,7 @@
   </joint>
 
   <link
-    name="Axis_2_Segment">
+    name="axis_2_link">
     <inertial>
       <origin
         xyz="0.179701426719665 -0.0176131583689303 5.71147464441535E-05"
@@ -188,7 +188,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/Axis_2_Segment.STL" />
+          filename="package://arm_description/meshes/axis_2_link.STL" />
       </geometry>
       <material
         name="">
@@ -202,23 +202,23 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/Axis_2_Segment.STL" />
+          filename="package://arm_description/meshes/axis_2_link.STL" />
       </geometry>
     </collision>
   </link>
 
   <joint
-    name="Axis_2_Joint"
+    name="axis_2_joint"
     type="revolute">
     <origin
       xyz="0.470027000000004 0.0126999999999999 0"
       rpy="3.14159265358979 0.000449358059257729 0" />
     <parent
-      link="Axis_1_Segment" />
+      link="axis_1_link" />
     <child
-      link="Axis_2_Segment" />
+      link="axis_2_link" />
     <axis
-      xyz="0 -1 0" />
+      xyz="0 1 0" />
     <limit
       lower="-2.0"
       upper="2.0"
@@ -227,7 +227,7 @@
   </joint>
 
   <link
-    name="Wrist">
+    name="wrist_box_link">
     <inertial>
       <origin
         xyz="0.0258890113931529 -0.0205223442970055 6.01641698143966E-05"
@@ -248,7 +248,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/Wrist.STL" />
+          filename="package://arm_description/meshes/wrist_box_link.STL" />
       </geometry>
       <material
         name="">
@@ -262,23 +262,23 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/Wrist.STL" />
+          filename="package://arm_description/meshes/wrist_box_link.STL" />
       </geometry>
     </collision>
   </link>
 
   <joint
-    name="Axis_3_Joint"
+    name="axis_3_joint"
     type="revolute">
     <origin
       xyz="0.393826999999998 0 0"
       rpy="0 -0.000409495780687665 0" />
     <parent
-      link="Axis_2_Segment" />
+      link="axis_2_link" />
     <child
-      link="Wrist" />
+      link="wrist_box_link" />
     <axis
-      xyz="0 -1 0" />
+      xyz="0 1 0" />
     <limit
       lower="-1.6"
       upper="1.9"
@@ -287,7 +287,7 @@
   </joint>
 
   <link
-    name="Diff_Carrier">
+    name="wrist_differential_link">
     <inertial>
       <origin
         xyz="-8.64620358677695E-06 -0.00516792807449162 -7.22608790769408E-07"
@@ -308,7 +308,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/Diff_Carrier.STL" />
+          filename="package://arm_description/meshes/wrist_differential_link.STL" />
       </geometry>
       <material
         name="">
@@ -322,21 +322,21 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/Diff_Carrier.STL" />
+          filename="package://arm_description/meshes/wrist_differential_link.STL" />
       </geometry>
     </collision>
   </link>
 
   <joint
-    name="Wrist_Differential_Joint"
+    name="wrist_yaw_joint"
     type="revolute">
     <origin
       xyz="0.176692001200001 -0.00622300000004081 0"
       rpy="-3.05263944120951 1.57079631189374 1.65994236547327" />
     <parent
-      link="Wrist" />
+      link="wrist_box_link" />
     <child
-      link="Diff_Carrier" />
+      link="wrist_differential_link" />
     <axis
       xyz="-1 0 0" />
     <limit
@@ -347,7 +347,7 @@
   </joint>
 
   <link
-    name="End_Effector">
+    name="ef_carrier_link">
     <inertial>
       <origin
         xyz="-0.00327558376591462 0.00327411156667146 -0.0553569354578649"
@@ -368,7 +368,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/End_Effector.STL" />
+          filename="package://arm_description/meshes/ef_carrier_link.STL" />
       </geometry>
       <material
         name="">
@@ -382,27 +382,27 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/End_Effector.STL" />
+          filename="package://arm_description/meshes/ef_carrier_link.STL" />
       </geometry>
     </collision>
   </link>
 
   <joint
-    name="Wrist-EF_Roll_Joint"
+    name="wrist_roll_joint"
     type="continuous">
     <origin
       xyz="0 0.01 0"
       rpy="-1.5708 -0.21566 -3.1416" />
     <parent
-      link="Diff_Carrier" />
+      link="wrist_differential_link" />
     <child
-      link="End_Effector" />
+      link="ef_carrier_link" />
     <axis
       xyz="0 0 1" />
   </joint>
 
   <link
-    name="EF_Gripper_Right">
+    name="ef_gripper_right_link">
     <inertial>
       <origin
         xyz="3.60822483003176E-16 0.0395187564799554 -0.0785892929086096"
@@ -423,7 +423,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/EF_Gripper_Right.STL" />
+          filename="package://arm_description/meshes/ef_gripper_right_link.STL" />
       </geometry>
       <material
         name="">
@@ -437,21 +437,21 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/EF_Gripper_Right.STL" />
+          filename="package://arm_description/meshes/ef_gripper_right_link.STL" />
       </geometry>
     </collision>
   </link>
 
   <joint
-    name="Gripper_Slider_Right"
+    name="ef_gripper_right_joint"
     type="prismatic">
     <origin
       xyz="0 0 -0.031677"
       rpy="0 0 3.1416" />
     <parent
-      link="End_Effector" />
+      link="ef_carrier_link" />
     <child
-      link="EF_Gripper_Right" />
+      link="ef_gripper_right_link" />
     <axis
       xyz="0 1 0" />
     <limit
@@ -460,12 +460,12 @@
       effort="0"
       velocity="0.015" />
     <mimic
-      joint="Gripper_Slider_Left"
+      joint="ef_gripper_left_joint"
       multiplier="-1" />
   </joint>
 
   <link
-    name="EF_Gripper_Left">
+    name="ef_gripper_left_link">
     <inertial>
       <origin
         xyz="0.000260261090099842 0.0391877753208171 -0.0810862651363518"
@@ -486,7 +486,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/EF_Gripper_Left.STL" />
+          filename="package://arm_description/meshes/ef_gripper_left_link.STL" />
       </geometry>
       <material
         name="">
@@ -500,21 +500,21 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://arm_description/meshes/EF_Gripper_Left.STL" />
+          filename="package://arm_description/meshes/ef_gripper_left_link.STL" />
       </geometry>
     </collision>
   </link>
 
   <joint
-    name="Gripper_Slider_Left"
+    name="ef_gripper_left_joint"
     type="prismatic">
     <origin
       xyz="0 0 -0.031677"
       rpy="0 0 0" />
     <parent
-      link="End_Effector" />
+      link="ef_carrier_link" />
     <child
-      link="EF_Gripper_Left" />
+      link="ef_gripper_left_link" />
     <axis
       xyz="0 -1 0" />
     <limit
