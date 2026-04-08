@@ -11,6 +11,6 @@ buildRosPackage rec {
 
   meta = {
     description = "This package contains configuration data, 3D models and launch files for Clucky's arm";
-    license = with lib.licenses; [ bsdOriginal ];
+    license = with lib.licenses; [ "AGPL-3.0-only" ];
   };
 }
