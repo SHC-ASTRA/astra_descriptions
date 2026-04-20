@@ -575,4 +575,18 @@
       link="core_gps_antenna_link" />
   </joint>
 
+  <gazebo reference="core_gps_antenna_link">
+    <material>
+      <ambient>"0.1 0.1 0.1 1"</ambient>
+      <diffuse>"0.1 0.1 0.1 1"</diffuse>
+      <specular>"0.1 0.1 0.1 1"</specular>
+    </material>
+    <sensor name="core_gps_sensor" type="gps">
+      <topic>gps/fix</topic>
+      <update_rate>5.0</update_rate>
+      <always_on>true</always_on>
+      <gz_frame_id>core_gps_antenna_link</gz_frame_id>
+    </sensor>
+  </gazebo>
+
 </robot>
