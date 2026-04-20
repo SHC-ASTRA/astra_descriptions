@@ -514,10 +514,21 @@
       <specular>"0.1 0.1 0.1 1"</specular>
     </material>
     <sensor name="core_emb_imu_sensor" type="imu">
-      <topic>'imu/data'</topic>
-      <update_rate>15.0</update_rate>
+      <topic>/imu/data</topic>
+      <update_rate>10.0</update_rate>
       <always_on>true</always_on>
-      <visualize>true</visualize>
+      <imu>
+        <angular_velocity>
+          <x><noise type="gaussian"><mean>0</mean><stddev>0.009</stddev></noise></x>
+          <y><noise type="gaussian"><mean>0</mean><stddev>0.009</stddev></noise></y>
+          <z><noise type="gaussian"><mean>0</mean><stddev>0.009</stddev></noise></z>
+        </angular_velocity>
+        <linear_acceleration>
+          <x><noise type="gaussian"><mean>0</mean><stddev>0.021</stddev></noise></x>
+          <y><noise type="gaussian"><mean>0</mean><stddev>0.021</stddev></noise></y>
+          <z><noise type="gaussian"><mean>0</mean><stddev>0.021</stddev></noise></z>
+        </linear_acceleration>
+      </imu>
       <gz_frame_id>core_embedded_imu_link</gz_frame_id>
     </sensor>
   </gazebo>
