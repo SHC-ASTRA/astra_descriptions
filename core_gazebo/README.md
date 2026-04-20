@@ -10,7 +10,7 @@ This package contains the launch file and configuration to simulate Core in Gaze
 - [Usage](#usage)
   - [Setup](#setup)
   - [Running](#running)
-- [File Structure](#file-structure)
+- [How it Do](#how-it-do)
 - [Maintainer(s)](#maintainers)
 
 ## Software Prerequisites
@@ -56,6 +56,18 @@ The full Gazebo simulation stack can be launched with the following command:
 
 ```bash
 $ ros2 launch core_gazebo core.gazebo.launch.py
+```
+
+If you need camera output, the following command will also publish a simulated camera on `/camera_head/*`:
+
+```bash
+$ ros2 launch core_gazebo core.gazebo.launch.py use_camera:=True
+```
+
+To drive Clucky, either run headless with `--ros-args -p use_old_topics:=False -p use_cmd_vel:=True` (run Anchor with the mock connector to satisfy the start condition in Headless), or run the following command to use your keyboard:
+
+```bash
+$ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r cmd_vel:=/diff_controller/cmd_vel -p stamped:=true
 ```
 
 ## How it Do
