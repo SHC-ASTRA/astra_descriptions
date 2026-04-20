@@ -5,7 +5,22 @@
 <robot
   name="core_description">
 
-  <link name="dummy_base_link"/>
+  <link name="dummy_base_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.001" />
+      <inertia
+        ixx="1e-6"
+        ixy="0"
+        ixz="0"
+        iyy="1e-6"
+        iyz="0"
+        izz="1e-6" />
+    </inertial>
+  </link>
 
   <joint name="dummy_base_link_joint" type="fixed">
     <parent link="dummy_base_link"/>
@@ -111,8 +126,8 @@
     <limit
       lower="-0.38"
       upper="0.38"
-      effort="0"
-      velocity="0" />
+      effort="50"
+      velocity="1.5" />
     <mimic
       joint="left_suspension_joint"
       multiplier="1"
@@ -285,8 +300,8 @@
     <limit
       lower="-0.38"
       upper="0.38"
-      effort="0"
-      velocity="0" />
+      effort="50"
+      velocity="1.5" />
     <mimic
       joint="left_suspension_joint"
       multiplier="-1"
@@ -302,12 +317,12 @@
       <mass
         value="1.7681" />
       <inertia
-        ixx="0"
-        ixy="0"
-        ixz="0"
-        iyy="0"
-        iyz="0"
-        izz="0" />
+        ixx="0.0021448"
+        ixy="-1.4957E-06"
+        ixz="-2.5225E-08"
+        iyy="0.0068473"
+        iyz="0.00021191"
+        izz="0.0058417" />
     </inertial>
     <visual>
       <origin
@@ -349,8 +364,8 @@
     <limit
       lower="-0.38"
       upper="0.38"
-      effort="0"
-      velocity="0" />
+      effort="50"
+      velocity="1.5" />
   </joint>
 
   <link
@@ -474,12 +489,12 @@
       <mass
         value="0.003" />
       <inertia
-        ixx="0"
+        ixx="1.91375e-07"
         ixy="0"
         ixz="0"
-        iyy="0"
+        iyy="1.06e-07"
         iyz="0"
-        izz="0" />
+        izz="2.97375e-07" />
     </inertial>
     <visual>
       <origin
@@ -542,12 +557,12 @@
       <mass
         value="0.05" />
       <inertia
-        ixx="0"
+        ixx="1.2083333333333335e-05"
         ixy="0"
         ixz="0"
-        iyy="0"
+        iyy="1.2083333333333335e-05"
         iyz="0"
-        izz="0" />
+        izz="2.0833333333333336e-05" />
     </inertial>
     <visual>
       <origin

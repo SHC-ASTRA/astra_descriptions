@@ -133,7 +133,7 @@ def generate_launch_description():
         ("-allow_renaming", "true"),
         ("-x", "0.0"),
         ("-y", "0.0"),
-        ("-z", "0.75"),
+        ("-z", "0.22"),
         ("-R", "0.0"),
         ("-P", "0.0"),
         ("-Y", "0.0"),
