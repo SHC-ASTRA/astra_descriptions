@@ -37,9 +37,6 @@ def generate_launch_description():
             LaunchConfiguration("hardware_mode"),
         ]
     )
-    robot_description = {
-        "robot_description": ParameterValue(robot_description_content, value_type=str)
-    }
 
     # Publish robot description with hardware_mode parameter
     ld.add_action(
@@ -47,7 +44,13 @@ def generate_launch_description():
             package="robot_state_publisher",
             executable="robot_state_publisher",
             output="screen",
-            parameters=[robot_description],
+            parameters=[
+                {
+                    "robot_description": ParameterValue(
+                        robot_description_content, value_type=str
+                    )
+                }
+            ],
         )
     )
 

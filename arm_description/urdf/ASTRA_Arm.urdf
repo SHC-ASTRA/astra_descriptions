@@ -6,7 +6,7 @@
   name="ASTRA_Arm">
 
   <link
-    name="base_link">
+    name="arm_base_link">
     <inertial>
       <origin
         xyz="0.026661 -0.017083 -0.072681"
@@ -94,7 +94,7 @@
       xyz="0.018772 -0.020734 -0.04971"
       rpy="1.5708 0 3.1115" />
     <parent
-      link="base_link" />
+      link="arm_base_link" />
     <child
       link="axis_0_link" />
     <axis

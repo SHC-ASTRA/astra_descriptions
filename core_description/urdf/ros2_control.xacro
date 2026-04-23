@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-    <xacro:macro name="core_ros2_control" params="hardware_mode">
+    <xacro:macro name="core_ros2_control" params="hardware_mode omit_gz_ros2_control">
 
         <ros2_control name="CoreSystem" type="system">
             <hardware>
@@ -41,16 +41,18 @@
             </joint>
         </ros2_control>
 
-        <xacro:if value="${hardware_mode == 'gazebo'}">
-            <gazebo>
-                <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-                    <parameters>$(find core_description)/config/ros2_controllers.yaml</parameters>
-                    <ros>
-                        <remapping>/diff_controller/cmd_vel_unstamped:=/core/twist</remapping>
-                    </ros>
-                </plugin>
-            </gazebo>
-        </xacro:if>
+        <xacro:unless value="${omit_gz_ros2_control}">
+            <xacro:if value="${hardware_mode == 'gazebo'}">
+                <gazebo>
+                    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                        <parameters>$(find core_description)/config/ros2_controllers.yaml</parameters>
+                        <ros>
+                            <remapping>/diff_controller/cmd_vel_unstamped:=/core/twist</remapping>
+                        </ros>
+                    </plugin>
+                </gazebo>
+            </xacro:if>
+        </xacro:unless>
 
     </xacro:macro>
 </robot>

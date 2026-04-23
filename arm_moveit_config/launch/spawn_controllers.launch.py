@@ -10,7 +10,7 @@ from launch.actions import (
 )
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PythonExpression
+from launch.substitutions import LaunchConfiguration, EqualsSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
@@ -42,7 +42,7 @@ def generate_launch_description():
         )
     )
 
-    # Spawn joint_state_broadcaster only when using simulated hardware (mock_components)
+    # Spawn joint_state_broadcaster only when using fake (non-Gazebo) hardware (mock_components)
     ld.add_action(
         Node(
             package="controller_manager",
@@ -50,12 +50,8 @@ def generate_launch_description():
             arguments=["joint_state_broadcaster"],
             output="screen",
             condition=IfCondition(
-                PythonExpression(
-                    [
-                        "'",
-                        LaunchConfiguration("hardware_mode"),
-                        "' == 'mock_components'",
-                    ]
+                EqualsSubstitution(
+                    LaunchConfiguration("hardware_mode"), "mock_components"
                 )
             ),
         )

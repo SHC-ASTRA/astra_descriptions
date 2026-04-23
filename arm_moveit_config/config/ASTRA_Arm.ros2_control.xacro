@@ -11,14 +11,17 @@
                     <param name="calculate_dynamics">true</param>
                     <param name="position_state_following_offset">0.0</param>
                 </xacro:if>
-                <xacro:unless value="${hardware_mode == 'mock_components'}">
+                <xacro:if value="${hardware_mode == 'gazebo'}">
+                    <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+                </xacro:if>
+                <xacro:if value="${hardware_mode == 'physical'}">
                     <!-- Use topic_based_ros2_control to interface with anchor and control real hardware -->
                     <plugin>topic_based_ros2_control/TopicBasedSystem</plugin>
                     <param name="joint_commands_topic">/joint_commands</param>
                     <param name="joint_states_topic">/joint_states</param>
                     <param name="trigger_joint_command_threshold">1e-5</param>  <!-- Set to -1 to disable -->
                     <param name="sum_wrapped_joint_states">false</param>
-                </xacro:unless>
+                </xacro:if>
             </hardware>
             <joint name="axis_0_joint">
                 <!-- <command_interface name="position"/> -->
@@ -78,5 +81,7 @@
             </joint>
 
         </ros2_control>
+
+        <!-- Gazebo ros2_control Plugin tag omitted, arm cannot be ran w/o Core in Gazebo -->
     </xacro:macro>
 </robot>

@@ -16,6 +16,7 @@ pkgs.mkShell {
       paths =
         [
           pkgs.colcon
+          pkgs.yq-go
           pkgs.rosPackages.${rosDistro}.ros-core
 
           # Work around https://github.com/lopsided98/nix-ros-overlay/pull/624

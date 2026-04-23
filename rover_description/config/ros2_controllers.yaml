@@ -1,0 +1,66 @@
+# yq -n 'load("../arm_moveit_config/config/ros2_controllers.yaml") * load("../core_description/config/ros2_controllers.yaml")' > config/.ros2_controllers.yaml
+
+# This config file is used by ros2_control
+controller_manager:
+  ros__parameters:
+    update_rate: 50 # Hz
+    astra_arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    hand_controller:
+      type: position_controllers/GripperActionController
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    diff_controller:
+      type: diff_drive_controller/DiffDriveController
+    joint_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+astra_arm_controller:
+  ros__parameters:
+    joints:
+      - axis_0_joint
+      - axis_1_joint
+      - axis_2_joint
+      - axis_3_joint
+      - wrist_yaw_joint
+      - wrist_roll_joint
+    command_interfaces:
+      # - position
+      - velocity
+    state_interfaces:
+      - position
+      - velocity
+    allow_nonzero_velocity_at_trajectory_end: true
+    gains:
+      axis_0_joint:
+        ff_velocity_scale: 1.0
+      axis_1_joint:
+        ff_velocity_scale: 1.0
+      axis_2_joint:
+        ff_velocity_scale: 1.0
+      axis_3_joint:
+        ff_velocity_scale: 1.0
+      wrist_yaw_joint:
+        ff_velocity_scale: 1.0
+      wrist_roll_joint:
+        ff_velocity_scale: 1.0
+hand_controller:
+  ros__parameters:
+    joint: ef_gripper_left_joint
+diff_controller:
+  ros__parameters:
+    left_wheel_names: ["bl_wheel_joint", "fl_wheel_joint"]
+    right_wheel_names: ["br_wheel_joint", "fr_wheel_joint"]
+    wheel_separation: 0.836 # TODO: fix
+    wheels_per_side: 2
+    wheel_radius: 0.171
+    base_frame_id: "dummy_base_link"
+    pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+    twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+    position_feedback: true
+    open_loop: false
+    enable_odom_tf: true
+    cmd_vel_timeout: 1.0
+    publish_limited_velocity: false
+    use_stamped_vel: true
+    publish_rate: 50.0 # odom topic and TF
+# TODO: add reasonable velocity and acceleration limits

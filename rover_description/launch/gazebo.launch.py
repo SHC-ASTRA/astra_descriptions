@@ -16,7 +16,8 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
     pkg_ros_gz_sim = FindPackageShare(package="ros_gz_sim").find("ros_gz_sim")
-    pkg_share_gazebo = FindPackageShare(package="core_gazebo").find("core_gazebo")
+    pkg_share_gazebo = FindPackageShare(package="rover_description").find("rover_description")
+    # TODO: remove (move all the gazebo stuff into this package)
     pkg_share_description = FindPackageShare(package="core_description").find(
         "core_description"
     )
@@ -55,32 +56,42 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 PathJoinSubstitution(
-                    [pkg_share_description, "launch", "display.launch.py"]
+                    [pkg_share_gazebo, "launch", "display.launch.py"]
                 )
             ),
             launch_arguments={("hardware_mode", "gazebo")},
         )
     )
 
-    # ROS2 Controllers
-    ld.add_action(
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                PathJoinSubstitution(
-                    [pkg_share_description, "launch", "spawn_controllers.launch.py"]
-                )
-            ),
-            launch_arguments={("hardware_mode", "gazebo")},
-        )
-    )
+    # # ROS2 Controllers
+    # ld.add_action(
+    #     IncludeLaunchDescription(
+    #         PythonLaunchDescriptionSource(
+    #             PathJoinSubstitution(
+    #                 [pkg_share_gazebo, "launch", "spawn_controllers.launch.py"]
+    #             )
+    #         ),
+    #         launch_arguments={("hardware_mode", "gazebo")},
+    #     )
+    # )
 
     # Set Gazebo model path - include both models directory and ROS packages
-    ld.add_action(AppendEnvironmentVariable("GZ_SIM_RESOURCE_PATH", gazebo_models_path))
+    ld.add_action(
+        AppendEnvironmentVariable(
+            "GZ_SIM_RESOURCE_PATH", gazebo_models_path
+        ),
+    )
 
     # Add ROS packages path so Gazebo can resolve package:// URIs
     ld.add_action(
         AppendEnvironmentVariable(
             "GZ_SIM_RESOURCE_PATH", os.path.dirname(pkg_share_description)
+        )
+    )
+
+    ld.add_action(
+        AppendEnvironmentVariable(
+            "GZ_SIM_RESOURCE_PATH", os.path.dirname(FindPackageShare(package="arm_description").find("arm_description"))
         )
     )
 
@@ -91,7 +102,7 @@ def generate_launch_description():
     ld.add_action(
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                os.path.join(pkg_ros_gz_sim, "launch", "gz_sim.launch.py")
+                PathJoinSubstitution([pkg_ros_gz_sim, "launch", "gz_sim.launch.py"])
             ),
             launch_arguments=[
                 ("gz_args", [" -r -v 3 --render-engine ogre2 ", world_path])

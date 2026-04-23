@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ASTRA_Arm">
+    <xacro:arg name="hardware_mode" default="mock_components" />
+
+    <!-- Import Arm Xacro file -->
+    <xacro:include filename="$(find arm_moveit_config)/config/ASTRA_Arm.urdf.xacro" />
+
+    <!-- Import Core Xacro file -->
+    <xacro:include filename="$(find core_description)/urdf/core_description.xacro" />
+
+    <!-- Attach Arm to Core -->
+    <joint name="arm_core_joint" type="fixed">
+        <origin
+            xyz="-0.03 -0.075 0.1"
+            rpy="0 0 0" />
+        <parent
+            link="base_link" />
+        <child
+            link="arm_base_link" />
+    </joint>
+
+    <gazebo>
+        <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+            <parameters>$(find rover_description)/config/ros2_controllers.yaml</parameters>
+            <ros>
+                <remapping>/diff_controller/cmd_vel_unstamped:=/core/twist</remapping>
+            </ros>
+        </plugin>
+    </gazebo>
+
+</robot>

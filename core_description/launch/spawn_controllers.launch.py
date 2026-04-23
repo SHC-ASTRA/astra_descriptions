@@ -28,21 +28,6 @@ def generate_launch_description():
         )
     )
 
-    # Controller Manager
-    ld.add_action(
-        Node(
-            condition=UnlessCondition(EqualsSubstitution(LaunchConfiguration("hardware_mode"), "gazebo")),
-            package="controller_manager",
-            executable="ros2_control_node",
-            parameters=[
-                PathJoinSubstitution([FindPackageShare("core_description"), "config", "ros2_controllers.yaml"]),
-            ],
-            remappings=[
-                ("/controller_manager/robot_description", "/robot_description"),
-            ],
-        )
-    )
-
     # Diff Drive Controller
     ld.add_action(
         Node(
