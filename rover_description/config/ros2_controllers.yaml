@@ -53,7 +53,7 @@ diff_controller:
     wheel_separation: 0.836 # TODO: fix
     wheels_per_side: 2
     wheel_radius: 0.171
-    base_frame_id: "dummy_base_link"
+    base_frame_id: "base_link"
     pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
     twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
     position_feedback: true

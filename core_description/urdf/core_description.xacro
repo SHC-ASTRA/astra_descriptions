@@ -3,7 +3,7 @@
   <xacro:arg name="hardware_mode" default="gazebo"/>
   <xacro:arg name="omit_gz_ros2_control" default="false"/>
 
-  <xacro:include filename="core_rover.urdf"/>
+  <xacro:include filename="core_description.urdf"/>
 
   <xacro:include filename="ros2_control.xacro"/>
 

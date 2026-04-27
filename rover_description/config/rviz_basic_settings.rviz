@@ -83,7 +83,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        dummy_base_link:
+        base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -128,7 +128,7 @@ Visualization Manager:
           Value: true
         br_wheel:
           Value: true
-        dummy_base_link:
+        base_link:
           Value: true
         fl_wheel:
           Value: true
@@ -146,7 +146,7 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        dummy_base_link:
+        base_link:
           base_link:
             averaging_bar:
               {}
