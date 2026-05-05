@@ -115,11 +115,9 @@ def generate_launch_description():
             package="ros_gz_image",
             executable="image_bridge",
             arguments=[
-                "/camera_head/depth_image",
                 "/camera_head/image",
             ],
             remappings=[
-                ("/camera_head/depth_image", "/camera_head/depth/image_rect_raw"),
                 ("/camera_head/image", "/camera_head/color/image_raw"),
             ],
             condition=IfCondition(LaunchConfiguration("use_camera")),
@@ -133,7 +131,7 @@ def generate_launch_description():
         ("-allow_renaming", "true"),
         ("-x", "0.0"),
         ("-y", "0.0"),
-        ("-z", "0.75"),
+        ("-z", "0.22"),
         ("-R", "0.0"),
         ("-P", "0.0"),
         ("-Y", "0.0"),

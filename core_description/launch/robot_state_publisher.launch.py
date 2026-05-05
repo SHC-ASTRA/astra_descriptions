@@ -43,7 +43,11 @@ def generate_launch_description():
             executable="robot_state_publisher",
             parameters=[
                 {
-                    "use_sim_time": ParameterValue(EqualsSubstitution(LaunchConfiguration("hardware_mode"), "gazebo")),
+                    "use_sim_time": ParameterValue(
+                        EqualsSubstitution(
+                            LaunchConfiguration("hardware_mode"), "gazebo"
+                        )
+                    ),
                     "robot_description": ParameterValue(
                         Command(
                             [
