@@ -13,58 +13,56 @@ pkgs.mkShell {
   packages = [
     (pkgs.rosPackages.${rosDistro}.buildEnv {
       wrapPrograms = false;
-      paths =
-        [
-          pkgs.colcon
-          pkgs.rosPackages.${rosDistro}.ros-core
+      paths = [
+        pkgs.colcon
+        pkgs.rosPackages.${rosDistro}.ros-core
 
-          # Work around https://github.com/lopsided98/nix-ros-overlay/pull/624
-          pkgs.rosPackages.${rosDistro}.ament-cmake-core
-          pkgs.rosPackages.${rosDistro}.python-cmake-module
+        # Work around https://github.com/lopsided98/nix-ros-overlay/pull/624
+        pkgs.rosPackages.${rosDistro}.ament-cmake-core
+        pkgs.rosPackages.${rosDistro}.python-cmake-module
+      ]
+      ++ (
+        with pkgs;
+        with pkgs.rosPackages.${rosDistro};
+        with extraPkgs;
+        [
+          # Dependencies from package.xml files
+          ament-cmake
+          ament-lint-auto
+          ament-lint-common
+          common-interfaces
+          controller-manager
+          diff-drive-controller
+          geometry2
+          #ign-ros2-control
+          joint-state-publisher
+          joint-state-publisher-gui
+          joint-trajectory-controller
+          moveit-configs-utils
+          moveit-kinematics
+          moveit-planners
+          moveit-ros-move-group
+          moveit-ros-visualization
+          moveit-ros-warehouse
+          moveit-setup-assistant
+          moveit-simple-controller-manager
+          pick-ik
+          rclpy
+          robot-state-publisher
+          #ros-gz
+          ros2-control
+          rviz-common
+          rviz-default-plugins
+          rviz2
+          tf2-ros
+          topic-based-ros2-control
+          xacro
         ]
-        ++ (
-          with pkgs;
-          with pkgs.rosPackages.${rosDistro};
-          with extraPkgs;
-          [
-            # Dependencies from package.xml files
-            ament-cmake
-            ament-lint-auto
-            ament-lint-common
-            common-interfaces
-            controller-manager
-            diff-drive-controller
-            geometry2
-            #ign-ros2-control
-            joint-state-publisher
-            joint-state-publisher-gui
-            joint-trajectory-controller
-            moveit-configs-utils
-            moveit-kinematics
-            moveit-planners
-            moveit-ros-move-group
-            moveit-ros-visualization
-            moveit-ros-warehouse
-            moveit-setup-assistant
-            moveit-simple-controller-manager
-            pick-ik
-            rclpy
-            robot-state-publisher
-            #ros-gz
-            ros2-control
-            rviz-common
-            rviz-default-plugins
-            rviz2
-            tf2-ros
-            topic-based-ros2-control
-            xacro
-          ]
-        )
-        ++ builtins.attrValues extraPkgs
-        ++ extraPaths
-        ++ withPackages (pkgs // pkgs.rosPackages.${rosDistro});
-      }
-    )
+      )
+      ++ builtins.attrValues extraPkgs
+      ++ extraPaths
+      ++ withPackages (pkgs // pkgs.rosPackages.${rosDistro});
+    })
   ];
   shellHook = ''
     # Setup ROS 2 shell completion. Doing it in direnv is useless.
@@ -72,5 +70,6 @@ pkgs.mkShell {
         eval "$(${pkgs.python3Packages.argcomplete}/bin/register-python-argcomplete ros2)"
         eval "$(${pkgs.python3Packages.argcomplete}/bin/register-python-argcomplete colcon)"
     fi
-  '' + extraShellHook;
+  ''
+  + extraShellHook;
 }

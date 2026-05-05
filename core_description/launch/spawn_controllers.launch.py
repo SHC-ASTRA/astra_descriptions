@@ -7,7 +7,11 @@ from launch.actions import (
 )
 from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, EqualsSubstitution, PathJoinSubstitution
+from launch.substitutions import (
+    LaunchConfiguration,
+    EqualsSubstitution,
+    PathJoinSubstitution,
+)
 
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
@@ -31,11 +35,19 @@ def generate_launch_description():
     # Controller Manager
     ld.add_action(
         Node(
-            condition=UnlessCondition(EqualsSubstitution(LaunchConfiguration("hardware_mode"), "gazebo")),
+            condition=UnlessCondition(
+                EqualsSubstitution(LaunchConfiguration("hardware_mode"), "gazebo")
+            ),
             package="controller_manager",
             executable="ros2_control_node",
             parameters=[
-                PathJoinSubstitution([FindPackageShare("core_description"), "config", "ros2_controllers.yaml"]),
+                PathJoinSubstitution(
+                    [
+                        FindPackageShare("core_description"),
+                        "config",
+                        "ros2_controllers.yaml",
+                    ]
+                ),
             ],
             remappings=[
                 ("/controller_manager/robot_description", "/robot_description"),
@@ -60,7 +72,9 @@ def generate_launch_description():
     # Joint State Broadcaster - only used for Gazebo, needed to publish /joint_states
     ld.add_action(
         Node(
-            condition=IfCondition(EqualsSubstitution(LaunchConfiguration("hardware_mode"), "gazebo")),
+            condition=IfCondition(
+                EqualsSubstitution(LaunchConfiguration("hardware_mode"), "gazebo")
+            ),
             package="controller_manager",
             executable="spawner",
             arguments=[
