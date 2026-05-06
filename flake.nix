@@ -1,10 +1,22 @@
 {
   inputs = {
     nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/master";
-    nixpkgs.follows = "nix-ros-overlay/nixpkgs";  # IMPORTANT!!!
+    nixpkgs.follows = "nix-ros-overlay/nixpkgs"; # IMPORTANT!!!
+
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-  outputs = { self, nix-ros-overlay, nixpkgs, ... }@inputs:
-    nix-ros-overlay.inputs.flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      nix-ros-overlay,
+      nixpkgs,
+      ...
+    }@inputs:
+    nix-ros-overlay.inputs.flake-utils.lib.eachDefaultSystem (
+      system:
       let
         applyDistroOverlay =
           rosOverlay: rosPackages:
@@ -25,7 +37,8 @@
         };
         rosDistro = "humble";
 
-      in {
+      in
+      {
         legacyPackages = pkgs.rosPackages;
         packages = builtins.intersectAttrs (import ./overlay.nix null null) pkgs.rosPackages.${rosDistro};
         checks = builtins.intersectAttrs (import ./overlay.nix null null) pkgs.rosPackages.${rosDistro};
@@ -34,9 +47,18 @@
           extraPkgs = { };
           extraPaths = [ ];
         };
-      });
+        formatter = (inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix).config.build.wrapper;
+      }
+    );
   nixConfig = {
-    extra-substituters = [ "https://ros.cachix.org" ];
-    extra-trusted-public-keys = [ "ros.cachix.org-1:dSyZxI8geDCJrwgvCOHDoAfOm5sV1wCPjBkKL+38Rvo=" ];
+    # Cache to pull ros packages from
+    extra-substituters = [
+      "https://ros.cachix.org"
+      "https://attic.iid.ciirc.cvut.cz/ros"
+    ];
+    extra-trusted-public-keys = [
+      "ros.cachix.org-1:dSyZxI8geDCJrwgvCOHDoAfOm5sV1wCPjBkKL+38Rvo="
+      "ros:JR95vUYsShSqfA1VTYoFt1Nz6uXasm5QrcOsGry9f6Q="
+    ];
   };
 }
