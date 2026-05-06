@@ -5,7 +5,12 @@ from pathlib import Path
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.conditions import IfCondition, UnlessCondition
-from launch.substitutions import Command, LaunchConfiguration, EqualsSubstitution, PathJoinSubstitution
+from launch.substitutions import (
+    Command,
+    LaunchConfiguration,
+    EqualsSubstitution,
+    PathJoinSubstitution,
+)
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
@@ -28,7 +33,9 @@ def generate_launch_description():
     ld.add_action(
         DeclareLaunchArgument(
             name="urdf_model",
-            default_value=PathJoinSubstitution([pkg_share, "urdf", "rover_description.xacro"]),
+            default_value=PathJoinSubstitution(
+                [pkg_share, "urdf", "rover_description.xacro"]
+            ),
             description="Absolute path to robot urdf file",
         )
     )
@@ -43,7 +50,11 @@ def generate_launch_description():
             executable="robot_state_publisher",
             parameters=[
                 {
-                    "use_sim_time": ParameterValue(EqualsSubstitution(LaunchConfiguration("hardware_mode"), "gazebo")),
+                    "use_sim_time": ParameterValue(
+                        EqualsSubstitution(
+                            LaunchConfiguration("hardware_mode"), "gazebo"
+                        )
+                    ),
                     "robot_description": ParameterValue(
                         Command(
                             [

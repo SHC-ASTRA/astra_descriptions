@@ -5,14 +5,21 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.conditions import IfCondition, UnlessCondition
-from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution, EqualsSubstitution
+from launch.substitutions import (
+    Command,
+    LaunchConfiguration,
+    PathJoinSubstitution,
+    EqualsSubstitution,
+)
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
-    pkg_share = FindPackageShare(package="testbed_description").find("testbed_description")
+    pkg_share = FindPackageShare(package="testbed_description").find(
+        "testbed_description"
+    )
 
     ld = LaunchDescription()
 
@@ -30,7 +37,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             name="spawn_rsp",
             default_value="false",
-            description="Whether to spawn the robot state publisher node."
+            description="Whether to spawn the robot state publisher node.",
         )
     )
 
@@ -39,7 +46,9 @@ def generate_launch_description():
     # Joint State Publisher GUI - publish and graphically modify joint states
     ld.add_action(
         Node(
-            condition=IfCondition(EqualsSubstitution(LaunchConfiguration("hardware_mode"), "preview")),
+            condition=IfCondition(
+                EqualsSubstitution(LaunchConfiguration("hardware_mode"), "preview")
+            ),
             package="joint_state_publisher_gui",
             executable="joint_state_publisher_gui",
             name="joint_state_publisher_gui",

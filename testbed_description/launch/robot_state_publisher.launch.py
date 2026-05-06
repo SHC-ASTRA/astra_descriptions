@@ -12,7 +12,9 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    pkg_share = FindPackageShare(package="testbed_description").find("testbed_description")
+    pkg_share = FindPackageShare(package="testbed_description").find(
+        "testbed_description"
+    )
 
     ld = LaunchDescription()
 
@@ -43,7 +45,11 @@ def generate_launch_description():
             executable="robot_state_publisher",
             parameters=[
                 {
-                    "use_sim_time": ParameterValue(EqualsSubstitution(LaunchConfiguration("hardware_mode"), "gazebo")),
+                    "use_sim_time": ParameterValue(
+                        EqualsSubstitution(
+                            LaunchConfiguration("hardware_mode"), "gazebo"
+                        )
+                    ),
                     "robot_description": ParameterValue(
                         Command(
                             [
