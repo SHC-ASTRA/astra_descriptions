@@ -2,8 +2,8 @@
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
-if [ -z "$(docker images -q astra_gazebo:latest 2> /dev/null)" ]; then
-    echo "Docker image 'astra_gazebo' not found. Building the image..."
+if [ -z "$(docker images -q astra/gazebo:latest 2> /dev/null)" ]; then
+    echo "Docker image 'astra/gazebo' not found. Building the image..."
     $SCRIPT_DIR/build_container.sh
 fi
 
@@ -17,4 +17,4 @@ docker run -it --rm \
     --env="QT_X11_NO_MITSHM=1" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --volume="$SCRIPT_DIR/..:/home/ubuntu/ros2_ws/src/astra_descriptions:rw" \
-    astra_gazebo:latest
+    astra/gazebo:latest
