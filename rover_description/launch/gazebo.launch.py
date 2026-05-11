@@ -63,17 +63,25 @@ def generate_launch_description():
         )
     )
 
-    # # ROS2 Controllers
-    # ld.add_action(
-    #     IncludeLaunchDescription(
-    #         PythonLaunchDescriptionSource(
-    #             PathJoinSubstitution(
-    #                 [pkg_share_gazebo, "launch", "spawn_controllers.launch.py"]
-    #             )
-    #         ),
-    #         launch_arguments={("hardware_mode", "gazebo")},
-    #     )
-    # )
+    # Arm IK
+    ld.add_action(
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                PathJoinSubstitution(
+                    [
+                        FindPackageShare("arm_moveit_config").find("arm_moveit_config"),
+                        "launch",
+                        "moveit2.launch.py",
+                    ]
+                )
+            ),
+            launch_arguments=[
+                ("hardware_mode", "gazebo"),
+                # Pass the Core+Arm URDF to MoveIt2 so it doesn't freak the fuck out
+                ("robot_description_file", PathJoinSubstitution([pkg_share_gazebo, "urdf", "rover_description.xacro"])),
+            ],
+        )
+    )
 
     # Set Gazebo model path - include both models directory and ROS packages
     ld.add_action(
