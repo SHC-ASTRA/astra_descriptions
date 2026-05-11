@@ -119,14 +119,7 @@ def generate_launch_description():
             parameters=[
                 PathJoinSubstitution(
                     [
-                        FindPackageShare("core_description"),
-                        "config",
-                        "ros2_controllers.yaml",
-                    ]
-                ),
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("arm_moveit_config"),
+                        FindPackageShare("rover_description"),
                         "config",
                         "ros2_controllers.yaml",
                     ]

@@ -8,7 +8,7 @@ controller_manager:
 
 
     hand_controller:
-      type: position_controllers/GripperActionController
+      type: velocity_controllers/JointGroupVelocityController
 
 
     joint_state_broadcaster:
@@ -46,4 +46,5 @@ astra_arm_controller:
 
 hand_controller:
   ros__parameters:
-    joint: ef_gripper_left_joint
+    joints:
+    - ef_gripper_left_joint

@@ -98,6 +98,7 @@
     <disable_collisions link1="ef_gripper_left_link" link2="wrist_box_link" reason="Never"/>
     <disable_collisions link1="ef_gripper_right_link" link2="ef_carrier_link" reason="Adjacent"/>
     <disable_collisions link1="ef_gripper_right_link" link2="wrist_box_link" reason="Never"/>
+    <disable_collisions link1="ef_gripper_right_link" link2="ef_gripper_left_link" reason="Never"/>
     <disable_collisions link1="ef_carrier_link" link2="wrist_box_link" reason="Never"/>
     <disable_collisions link1="ef_carrier_link" link2="arm_base_link" reason="Never"/>
     <disable_collisions link1="wrist_box_link" link2="arm_base_link" reason="Never"/>

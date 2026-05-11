@@ -7,7 +7,7 @@ controller_manager:
     astra_arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
     hand_controller:
-      type: position_controllers/GripperActionController
+      type: velocity_controllers/JointGroupVelocityController
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
     diff_controller:
@@ -45,7 +45,8 @@ astra_arm_controller:
         ff_velocity_scale: 1.0
 hand_controller:
   ros__parameters:
-    joint: ef_gripper_left_joint
+    joints:
+      - ef_gripper_left_joint
 diff_controller:
   ros__parameters:
     left_wheel_names: ["bl_wheel_joint", "fl_wheel_joint"]
