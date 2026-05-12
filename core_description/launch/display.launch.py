@@ -77,4 +77,15 @@ def generate_launch_description():
         )
     )
 
+    # Robot Localization EKF
+    ld.add_action(
+        Node(
+            package="robot_localization",
+            executable="ekf_node",
+            name="ekf_filter_node",
+            output="screen",
+            arguments=["-d", os.path.join(pkg_share, "config/ekf.yaml")],
+        )
+    )
+
     return ld
