@@ -1,5 +1,6 @@
-navsat_transform:
+navsat_transform_node:
     ros__parameters:
+        use_sim_time: true
         frequency: 10.0
         delay: 0.0
 
@@ -13,7 +14,3 @@ navsat_transform:
 
         use_odometry_yaw: false # must be world referenced
         wait_for_datum: false
-
-        gps0: /core/gps/fix
-        imu0: /core/imu/data
-        odom0: /odometry/local
