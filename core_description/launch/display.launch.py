@@ -82,9 +82,9 @@ def generate_launch_description():
         Node(
             package="robot_localization",
             executable="ekf_node",
-            name="ekf_node",
+            name="ekf_local_node",
             output="screen",
-            parameters=[os.path.join(pkg_share, "config/ekf.yaml")],
+            parameters=[os.path.join(pkg_share, "config/ekf_local.yaml")],
             remappings=[
                 ("odometry/filtered", "/odometry/local"),
             ],
@@ -105,6 +105,20 @@ def generate_launch_description():
                 ("odometry/filtered", "/odometry/local"),
                 ("odometry/gps", "/odometry/gps"),
                 ("gps/filtered", "/gps/filtered"),
+            ],
+        )
+    )
+
+    # Robot Localization EKF global
+    ld.add_action(
+        Node(
+            package="robot_localization",
+            executable="ekf_node",
+            name="ekf_global_node",
+            output="screen",
+            parameters=[os.path.join(pkg_share, "config/ekf_global.yaml")],
+            remappings=[
+                ("odometry/filtered", "/odometry/global"),
             ],
         )
     )
