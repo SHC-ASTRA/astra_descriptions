@@ -78,7 +78,12 @@ def generate_launch_description():
             launch_arguments=[
                 ("hardware_mode", "gazebo"),
                 # Pass the Core+Arm URDF to MoveIt2 so it doesn't freak the fuck out
-                ("robot_description_file", PathJoinSubstitution([pkg_share_gazebo, "urdf", "rover_description.xacro"])),
+                (
+                    "robot_description_file",
+                    PathJoinSubstitution(
+                        [pkg_share_gazebo, "urdf", "rover_description.xacro"]
+                    ),
+                ),
             ],
         )
     )

@@ -16,8 +16,10 @@ from launch_param_builder import ParameterBuilder
 
 
 def generate_launch_description():
-    arm_moveit_config_share = FindPackageShare("arm_moveit_config").find("arm_moveit_config")
-    
+    arm_moveit_config_share = FindPackageShare("arm_moveit_config").find(
+        "arm_moveit_config"
+    )
+
     moveit_config = MoveItConfigsBuilder(
         "ASTRA_Arm", package_name="arm_moveit_config"
     ).to_moveit_configs()
@@ -49,19 +51,23 @@ def generate_launch_description():
     ld.add_action(
         DeclareLaunchArgument(
             "robot_description_file",
-            default_value=PathJoinSubstitution([arm_moveit_config_share, "config", "ASTRA_Arm.urdf.xacro"]),
+            default_value=PathJoinSubstitution(
+                [arm_moveit_config_share, "config", "ASTRA_Arm.urdf.xacro"]
+            ),
             description="Path to the robot URDF/Xacro file. When integrated with rover, pass the combined rover_description.xacro",
         )
     )
 
     # Build robot_description from the specified file
     robot_description_config = ParameterValue(
-        Command([
-            "xacro ",
-            LaunchConfiguration("robot_description_file"),
-            " hardware_mode:=",
-            LaunchConfiguration("hardware_mode"),
-        ]),
+        Command(
+            [
+                "xacro ",
+                LaunchConfiguration("robot_description_file"),
+                " hardware_mode:=",
+                LaunchConfiguration("hardware_mode"),
+            ]
+        ),
         value_type=str,
     )
 
