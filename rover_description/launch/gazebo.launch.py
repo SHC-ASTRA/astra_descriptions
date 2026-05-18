@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# Creates a Gazebo simulation for the rover.
 
 import os
 from launch import LaunchDescription
@@ -31,8 +31,16 @@ def generate_launch_description():
         pkg_share_gazebo, "config/ros_gz_bridge.yaml"
     )
 
-    ################################################################################################
+    ####################################################################################
     # Launch Arguments
+
+    ld.add_action(
+        DeclareLaunchArgument(
+            name="spawn_rviz",
+            default_value="true",
+            description="Whether to spawn RViz for URDF and TF2 visualization.",
+        )
+    )
 
     ld.add_action(
         DeclareLaunchArgument(
@@ -50,16 +58,21 @@ def generate_launch_description():
         )
     )
 
-    ################################################################################################
+    ####################################################################################
     # Launch Nodes
 
-    # Robot State Publisher and RViz
     ld.add_action(
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                PathJoinSubstitution([pkg_share_gazebo, "launch", "display.launch.py"])
+                PathJoinSubstitution([pkg_share_gazebo, "launch", "nodes.launch.py"])
             ),
-            launch_arguments={("hardware_mode", "gazebo")},
+            launch_arguments={
+                ("hardware_mode", "gazebo"),
+                ("spawn_rsp", "true"),
+                ("spawn_controller_manager", "false"),
+                ("spawn_controllers", "true"),
+                ("spawn_rviz", LaunchConfiguration("spawn_rviz")),
+            },
         )
     )
 

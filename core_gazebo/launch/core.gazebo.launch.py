@@ -33,6 +33,14 @@ def generate_launch_description():
 
     ld.add_action(
         DeclareLaunchArgument(
+            name="spawn_rviz",
+            default_value="true",
+            description="Whether to spawn RViz for URDF and TF2 visualization.",
+        )
+    )
+
+    ld.add_action(
+        DeclareLaunchArgument(
             name="use_camera",
             default_value="false",
             description="Flag to enable the RGBD camera for Gazebo point cloud simulation",
@@ -50,27 +58,18 @@ def generate_launch_description():
     ################################################################################################
     # Launch Nodes
 
-    # Robot State Publisher and RViz
     ld.add_action(
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                PathJoinSubstitution(
-                    [pkg_share_description, "launch", "display.launch.py"]
-                )
+                PathJoinSubstitution([pkg_share_description, "launch", "nodes.launch.py"])
             ),
-            launch_arguments={("hardware_mode", "gazebo"), ("spawn_rsp", "true")},
-        )
-    )
-
-    # ROS2 Controllers
-    ld.add_action(
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                PathJoinSubstitution(
-                    [pkg_share_description, "launch", "spawn_controllers.launch.py"]
-                )
-            ),
-            launch_arguments={("hardware_mode", "gazebo")},
+            launch_arguments={
+                ("hardware_mode", "gazebo"),
+                ("spawn_rsp", "true"),
+                ("spawn_controller_manager", "false"),
+                ("spawn_controllers", "true"),
+                ("spawn_rviz", LaunchConfiguration("spawn_rviz")),
+            },
         )
     )
 

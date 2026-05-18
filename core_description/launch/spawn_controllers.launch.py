@@ -1,4 +1,4 @@
-import os
+# Spawns ros2_control controllers
 
 from launch import LaunchDescription
 from launch.actions import (
@@ -29,29 +29,6 @@ def generate_launch_description():
             name="hardware_mode",
             default_value="gazebo",
             description="Hardware mode: 'preview' for URDF preview, 'gazebo' for simulation, 'physical' for real hardware",
-        )
-    )
-
-    # Controller Manager
-    ld.add_action(
-        Node(
-            condition=UnlessCondition(
-                EqualsSubstitution(LaunchConfiguration("hardware_mode"), "gazebo")
-            ),
-            package="controller_manager",
-            executable="ros2_control_node",
-            parameters=[
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("core_description"),
-                        "config",
-                        "ros2_controllers.yaml",
-                    ]
-                ),
-            ],
-            remappings=[
-                ("/controller_manager/robot_description", "/robot_description"),
-            ],
         )
     )
 

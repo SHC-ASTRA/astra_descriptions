@@ -1,4 +1,4 @@
-# Visualize the URDF in RViz.
+# Ran on the physical rover.
 
 import os
 from launch import LaunchDescription
@@ -27,13 +27,7 @@ def generate_launch_description():
     ####################################################################################
     # Launch Arguments
 
-    ld.add_action(
-        DeclareLaunchArgument(
-            name="hardware_mode",
-            default_value="preview",
-            description="Hardware mode: 'preview' for URDF preview, 'physical' for real hardware",
-        )
-    )
+    # Can't think of any
 
     ####################################################################################
     # Launch Nodes
@@ -44,30 +38,12 @@ def generate_launch_description():
                 PathJoinSubstitution([pkg_share, "launch", "nodes.launch.py"])
             ),
             launch_arguments={
-                ("hardware_mode", LaunchConfiguration("hardware_mode")),
-                (
-                    "spawn_rsp",
-                    EqualsSubstitution(LaunchConfiguration("hardware_mode"), "preview"),
-                ),
-                ("spawn_controller_manager", "false"),
-                ("spawn_controllers", "false"),
-                ("spawn_rviz", "true"),
+                ("hardware_mode", "physical"),
+                ("spawn_rsp", "true"),
+                ("spawn_controller_manager", "true"),
+                ("spawn_controllers", "true"),
+                ("spawn_rviz", "false"),
             },
-        )
-    )
-
-    # Joint State Publisher GUI - publish and graphically modify joint states
-    ld.add_action(
-        Node(
-            package="joint_state_publisher_gui",
-            executable="joint_state_publisher_gui",
-            name="joint_state_publisher_gui",
-            # In preview mode, user should be able to change joint angles; otherwise,
-            # they will be controlled by Gazebo or core_node from the state of the sim
-            # or physical hardware.
-            condition=IfCondition(
-                EqualsSubstitution(LaunchConfiguration("hardware_mode"), "preview")
-            ),
         )
     )
 
