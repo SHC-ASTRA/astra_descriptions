@@ -58,7 +58,7 @@ def generate_launch_description():
                     [pkg_share_description, "launch", "display.launch.py"]
                 )
             ),
-            launch_arguments={("hardware_mode", "gazebo")},
+            launch_arguments={("hardware_mode", "gazebo"), ("spawn_rsp", "true")},
         )
     )
 
@@ -131,7 +131,7 @@ def generate_launch_description():
         ("-allow_renaming", "true"),
         ("-x", "0.0"),
         ("-y", "0.0"),
-        ("-z", "0.22"),
+        ("-z", "0.5"),
         ("-R", "0.0"),
         ("-P", "0.0"),
         ("-Y", "0.0"),
