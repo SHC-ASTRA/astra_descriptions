@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>astra_descriptions</name>
+  <version>1.0.0</version>
+  <description>ASTRA's URDFs and their supporting files.</description>
+  <maintainer email="ds0196@uah.edu">David Sharpe</maintainer>
+  <license>AGPL-3.0-only</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>astra_msgs</exec_depend>
+  <exec_depend>arm_description</exec_depend>
+  <exec_depend>arm_moveit_config</exec_depend>
+  <exec_depend>core_description</exec_depend>
+  <exec_depend>core_gazebo</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
