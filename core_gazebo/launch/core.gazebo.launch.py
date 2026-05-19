@@ -61,7 +61,9 @@ def generate_launch_description():
     ld.add_action(
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                PathJoinSubstitution([pkg_share_description, "launch", "nodes.launch.py"])
+                PathJoinSubstitution(
+                    [pkg_share_description, "launch", "nodes.launch.py"]
+                )
             ),
             launch_arguments={
                 ("hardware_mode", "gazebo"),

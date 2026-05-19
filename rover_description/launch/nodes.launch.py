@@ -21,6 +21,7 @@ from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
 
+
 def generate_launch_description():
     pkg_share = FindPackageShare(package="rover_description").find("rover_description")
 
@@ -49,21 +50,21 @@ def generate_launch_description():
         DeclareLaunchArgument(
             name="spawn_rsp",
             default_value="false",
-            description="Whether to spawn the Robot State Publisher."
+            description="Whether to spawn the Robot State Publisher.",
         )
     )
     ld.add_action(
         DeclareLaunchArgument(
             name="spawn_controller_manager",
             default_value="false",
-            description="Whether to spawn the ros2_control controller manager."
+            description="Whether to spawn the ros2_control controller manager.",
         )
     )
     ld.add_action(
         DeclareLaunchArgument(
             name="spawn_controllers",
             default_value="false",
-            description="Whether to spawn the ros2_control controllers."
+            description="Whether to spawn the ros2_control controllers.",
         )
     )
     ld.add_action(
@@ -143,9 +144,7 @@ def generate_launch_description():
                 ("/controller_manager/robot_description", "/robot_description"),
             ],
             # Gazebo runs its own bullshit
-            condition=IfCondition(
-                LaunchConfiguration("spawn_controller_manager")
-            ),
+            condition=IfCondition(LaunchConfiguration("spawn_controller_manager")),
         )
     )
 
@@ -190,7 +189,10 @@ def generate_launch_description():
             executable="rviz2",
             name="rviz2",
             output="screen",
-            arguments=["-d", PathJoinSubstitution([pkg_share, "config", "display.rviz"])],
+            arguments=[
+                "-d",
+                PathJoinSubstitution([pkg_share, "config", "display.rviz"]),
+            ],
             # Basically everything that uses this launch file wants RViz unless you don't
             condition=IfCondition(LaunchConfiguration("spawn_rviz")),
         )
