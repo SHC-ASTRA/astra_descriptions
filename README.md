@@ -10,6 +10,7 @@ Contains URDF files, meshes, launch files, and configurations for Clucky and Tes
 - [Usage](#usage)
   - [Setup](#setup)
   - [Running](#running)
+  - [Gazebo](#gazebo)
 - [Packages](#packages)
 - [Major To-Do Items](#major-to-do-items)
 - [Maintainer(s)](#maintainers)
@@ -62,6 +63,20 @@ $ ros2 launch core_description display.launch.py  # View Core URDF in RViz
 $ ros2 launch arm_description display.launch.py   # View Arm URDF in RViz
 $ ros2 launch core_gazebo core.gazebo.launch.py   # Simulate Clucky in Gazebo with diff_drive_controller
 $ ros2 launch arm_moveit_config demo.launch.py    # Run Moveit2 for Arm IK
+```
+
+### Gazebo
+
+This repository contains a Dockerfile that can be used to run Gazebo on non-Ubuntu systems (e.g., NixOS). It uses `ros:humble-ros-desktop` as a base image and `rosdep` for setting up dependencies. To use it, simply run:
+
+```bash
+$ src/astra_descriptions/gazebo/run_container.sh
+```
+
+This will build (if necessary) and run the container, dropping you into a bash shell. Your local copy of `astra_descriptions` will be volume mounted into the container, and the workspace has already been built using symlinks. The script will recommend that you run the following command to launch a Gazebo simulation with Core:
+
+```bash
+$ source install/setup.bash && ros2 launch core_gazebo core.gazebo.launch.py
 ```
 
 ## Packages
