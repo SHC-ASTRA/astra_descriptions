@@ -62,6 +62,6 @@ diff_controller:
     enable_odom_tf: true
     cmd_vel_timeout: 1.0
     publish_limited_velocity: false
-    use_stamped_vel: true
+    use_stamped_vel: false
     publish_rate: 50.0 # odom topic and TF
 # TODO: add reasonable velocity and acceleration limits

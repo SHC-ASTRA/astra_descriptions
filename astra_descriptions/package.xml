@@ -9,7 +9,6 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <exec_depend>astra_msgs</exec_depend>
   <exec_depend>arm_description</exec_depend>
   <exec_depend>arm_moveit_config</exec_depend>
   <exec_depend>core_description</exec_depend>
