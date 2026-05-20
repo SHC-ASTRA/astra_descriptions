@@ -17,8 +17,14 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     pkg_ros_gz_sim = FindPackageShare(package="ros_gz_sim").find("ros_gz_sim")
     pkg_share_gazebo = FindPackageShare(package="core_gazebo").find("core_gazebo")
-    pkg_share_description = FindPackageShare(package="core_description").find(
+
+    description_pkg_name = (
         "core_description"
+        if not LaunchConfiguration("testbed")
+        else "testbed_description"
+    )
+    pkg_share_description = FindPackageShare(package=description_pkg_name).find(
+        description_pkg_name
     )
 
     ld = LaunchDescription()
@@ -52,6 +58,14 @@ def generate_launch_description():
             name="world_file",
             default_value="pick_and_place_demo.world",
             description="World file name (e.g., simple_demo.world, pick_and_place_demo.world)",
+        )
+    )
+
+    ld.add_action(
+        DeclareLaunchArgument(
+            name="testbed",
+            default_value="false",
+            description="Whether to launch testbed instead of Core.",
         )
     )
 
@@ -132,7 +146,7 @@ def generate_launch_description():
         ("-allow_renaming", "true"),
         ("-x", "0.0"),
         ("-y", "0.0"),
-        ("-z", "0.5"),
+        ("-z", "0.1"),
         ("-R", "0.0"),
         ("-P", "0.0"),
         ("-Y", "0.0"),

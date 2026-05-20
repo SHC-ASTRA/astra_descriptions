@@ -237,12 +237,12 @@
       <mass
         value="2.1868" />
       <inertia
-        ixx="0"
+        ixx="1e6"
         ixy="0"
         ixz="0"
-        iyy="0"
+        iyy="1e6"
         iyz="0"
-        izz="0" />
+        izz="1e6" />
     </inertial>
     <visual>
       <origin
