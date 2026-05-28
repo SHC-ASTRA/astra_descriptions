@@ -46,7 +46,7 @@
                 <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
                     <parameters>$(find core_description)/config/ros2_controllers.yaml</parameters>
                     <ros>
-                        <remapping>/diff_controller/cmd_vel_unstamped:=/core/cmd_vel</remapping>
+                        <remapping>/diff_controller/cmd_vel_unstamped:=/core/control/cmd_vel</remapping>
                     </ros>
                 </plugin>
             </gazebo>
