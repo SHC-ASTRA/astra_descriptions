@@ -14,7 +14,7 @@
                 <xacro:unless value="${hardware_mode == 'mock_components'}">
                     <!-- Use topic_based_ros2_control to interface with anchor and control real hardware -->
                     <plugin>topic_based_ros2_control/TopicBasedSystem</plugin>
-                    <param name="joint_commands_topic">/joint_commands</param>
+                    <param name="joint_commands_topic">/arm/joint_commands</param>
                     <param name="joint_states_topic">/joint_states</param>
                     <param name="trigger_joint_command_threshold">1e-5</param>  <!-- Set to -1 to disable -->
                     <param name="sum_wrapped_joint_states">false</param>
