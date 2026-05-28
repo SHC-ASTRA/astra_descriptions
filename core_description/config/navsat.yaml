@@ -1,0 +1,16 @@
+navsat_transform_node:
+    ros__parameters:
+        use_sim_time: true
+        frequency: 10.0
+        delay: 0.0
+
+        # Update declination from http://www.ngdc.noaa.gov/geomag-web/
+        magnetic_declination_radians: 0.1737602679 # rads
+        yaw_offset: 0.0 # IMU's yaw, once the magentic_declination_radians value is added to it
+
+        zero_altitude: true
+        broadcast_utm_transform: false
+        publish_filtered_gps: true
+
+        use_odometry_yaw: false # must be world referenced
+        wait_for_datum: false
