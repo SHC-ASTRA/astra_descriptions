@@ -1,5 +1,4 @@
 from moveit_configs_utils import MoveItConfigsBuilder
-from moveit_configs_utils.launches import generate_rsp_launch
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument

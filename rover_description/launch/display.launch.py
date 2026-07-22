@@ -1,22 +1,18 @@
 # Visualize the URDF in RViz.
 
-import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.conditions import IfCondition, UnlessCondition
+from launch.conditions import IfCondition
 
 # https://docs.ros.org/en/rolling/p/launch/launch.substitutions.html
 from launch.substitutions import (
-    Command,
     LaunchConfiguration,
     PathJoinSubstitution,
     EqualsSubstitution,
-    OrSubstitution,
 )
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
