@@ -3,7 +3,7 @@
 <package format="3">
   <name>rover_description</name>
   <version>1.0.0</version>
-  <description>This package contains things</description>
+  <description>Attempts to integrate the Core and Arm URDF packages for physical, simulated, and preview use.</description>
   <maintainer email="ds0196@uah.edu">David Sharpe</maintainer>
   <license>AGPL-3.0-only</license>
 

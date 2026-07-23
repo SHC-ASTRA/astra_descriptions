@@ -35,7 +35,7 @@ pkgs.mkShell {
           controller-manager
           diff-drive-controller
           geometry2
-          #ign-ros2-control
+          #gz-ros2-control
           joint-state-publisher
           joint-state-publisher-gui
           joint-trajectory-controller
