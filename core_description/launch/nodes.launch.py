@@ -132,6 +132,8 @@ def generate_launch_description():
             ],
             remappings=[
                 ("/controller_manager/robot_description", "/robot_description"),
+                ("/diff_controller/cmd_vel_unstamped", "/core/control/cmd_vel"),
+                ("/diff_controller/odom", "/core/feedback/wheel_odom"),
             ],
             condition=IfCondition(LaunchConfiguration("spawn_controller_manager")),
         )
