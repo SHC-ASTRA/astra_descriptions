@@ -102,6 +102,10 @@ def generate_launch_description():
                                 LaunchConfiguration("urdf_model"),
                                 " hardware_mode:=",
                                 LaunchConfiguration("hardware_mode"),
+                                # Standalone Core owns its own gz_ros2_control plugin (the
+                                # xacro defaults this to false for the Core+Arm case, which
+                                # uses the one from rover_description's xacro).
+                                " add_core_gz_ros2_control:=true",
                             ]
                         ),
                         value_type=str,

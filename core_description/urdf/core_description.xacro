@@ -1,12 +1,15 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="core_rover">
-  <xacro:arg name="hardware_mode" default="gazebo"/>
-  <xacro:arg name="omit_gz_ros2_control" default="false"/>
+  <xacro:arg name="hardware_mode" default="preview"/>
+  <!-- Tells Core to add its own gz_ros2_control plugin. Default false so combining into
+       rover_description doesn't add a second one (double controller_manager);
+       standalone core sim sets it true. -->
+  <xacro:arg name="add_core_gz_ros2_control" default="false"/>
 
   <xacro:include filename="core_description.urdf"/>
 
   <xacro:include filename="ros2_control.xacro"/>
 
-  <xacro:core_ros2_control hardware_mode="$(arg hardware_mode)" omit_gz_ros2_control="$(arg omit_gz_ros2_control)"/>
+  <xacro:core_ros2_control hardware_mode="$(arg hardware_mode)" add_core_gz_ros2_control="$(arg add_core_gz_ros2_control)"/>
 
 </robot>

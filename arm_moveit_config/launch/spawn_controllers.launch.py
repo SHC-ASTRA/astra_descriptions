@@ -1,10 +1,7 @@
 from moveit_configs_utils import MoveItConfigsBuilder
 
-
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.conditions import IfCondition
-from launch.substitutions import LaunchConfiguration, EqualsSubstitution
 
 from launch_ros.actions import Node
 
@@ -20,26 +17,14 @@ def generate_launch_description():
 
     ld = LaunchDescription()
 
+    # Declared for parity with the other spawn_controllers launches (other launches pass it in).
+    # The arm's controllers are the same across gazebo and physical; the joint_state_broadcaster
+    # is spawned once by core (Gazebo) or the arm node publishes /joint_states directly (physical).
     ld.add_action(
         DeclareLaunchArgument(
             "hardware_mode",
-            default_value="mock_components",
-            description="Hardware mode: 'mock_components' for simulation, 'physical' for real hardware",
-        )
-    )
-
-    # Spawn joint_state_broadcaster only when using fake (non-Gazebo) hardware (mock_components)
-    ld.add_action(
-        Node(
-            package="controller_manager",
-            executable="spawner",
-            arguments=["joint_state_broadcaster"],
-            output="screen",
-            condition=IfCondition(
-                EqualsSubstitution(
-                    LaunchConfiguration("hardware_mode"), "mock_components"
-                )
-            ),
+            default_value="preview",
+            description="Hardware mode: 'gazebo' for simulation, 'physical' for real hardware",
         )
     )
 

@@ -43,8 +43,8 @@ def generate_launch_description():
     ld.add_action(
         DeclareLaunchArgument(
             "hardware_mode",
-            default_value="mock_components",
-            description="Hardware mode: 'mock_components' for simulation, 'physical' for real hardware",
+            default_value="preview",
+            description="Hardware mode: 'gazebo' for simulation, 'physical' for real hardware",
         )
     )
 

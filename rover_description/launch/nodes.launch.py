@@ -102,7 +102,7 @@ def generate_launch_description():
                                 LaunchConfiguration("urdf_model"),
                                 " hardware_mode:=",
                                 LaunchConfiguration("hardware_mode"),
-                                " omit_gz_ros2_control:=true",  # Core
+                                " add_core_gz_ros2_control:=false",  # Core
                             ]
                         ),
                         value_type=str,
