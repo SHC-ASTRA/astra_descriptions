@@ -1,11 +1,12 @@
 # Creates a Gazebo simulation for the rover.
 
 import os
-from launch import LaunchDescription
+from launch import Action, LaunchContext, LaunchDescription
 from launch.actions import (
     AppendEnvironmentVariable,
     DeclareLaunchArgument,
     IncludeLaunchDescription,
+    OpaqueFunction,
 )
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -55,6 +56,14 @@ def generate_launch_description():
             name="world_file",
             default_value="pick_and_place_demo.world",
             description="World file name (e.g., simple_demo.world, pick_and_place_demo.world)",
+        )
+    )
+
+    ld.add_action(
+        DeclareLaunchArgument(
+            name="spawn_z",
+            default_value="0.5",
+            description="Model height at spawn (m).",
         )
     )
 
@@ -163,24 +172,38 @@ def generate_launch_description():
     )
 
     # Spawn the robot in Gazebo
+    ld.add_action(OpaqueFunction(function=spawn_rover))
+
+    return ld
+
+
+def spawn_rover(context: LaunchContext) -> list[Action]:
+    """Spawn the rover in Gazebo at the requested height."""
+    # Ran at launch time so a bad spawn_z fails here instead of inside Gazebo. Keep the
+    # model above the ground plane: anything that starts underground stalls Gazebo for
+    # ~20 s, making the controllers time out before Gazebo runs its first update.
+    spawn_z = LaunchConfiguration("spawn_z").perform(context)
+    try:
+        float(spawn_z)
+    except ValueError:
+        raise RuntimeError(f"spawn_z must be a number in meters, got '{spawn_z}'")
+
     gz_args = [
         ("-topic", "/robot_description"),
         ("-name", "core_rover"),
         ("-allow_renaming", "true"),
         ("-x", "0.0"),
         ("-y", "0.0"),
-        ("-z", "0.5"),
+        ("-z", spawn_z),
         ("-R", "0.0"),
         ("-P", "0.0"),
         ("-Y", "0.0"),
     ]
-    ld.add_action(
+    return [
         Node(
             package="ros_gz_sim",
             executable="create",
             output="screen",
             arguments=sum(gz_args, ()),  # ROS2 requires flat list for shell args
         )
-    )
-
-    return ld
+    ]
