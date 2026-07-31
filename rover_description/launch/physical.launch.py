@@ -22,6 +22,7 @@ def generate_launch_description():
     ####################################################################################
     # Launch Nodes
 
+    # RSP, Controller Manager, Controllers
     ld.add_action(
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -34,6 +35,31 @@ def generate_launch_description():
                 ("spawn_controllers", "true"),
                 ("spawn_rviz", "false"),
             },
+        )
+    )
+
+    # Moveit2
+    ld.add_action(
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                PathJoinSubstitution(
+                    [
+                        FindPackageShare("arm_moveit_config").find("arm_moveit_config"),
+                        "launch",
+                        "moveit2.launch.py",
+                    ]
+                )
+            ),
+            launch_arguments=[
+                ("hardware_mode", "physical"),
+                # Pass the Core+Arm URDF to MoveIt2 so it doesn't freak the fuck out
+                (
+                    "robot_description_file",
+                    PathJoinSubstitution(
+                        [pkg_share, "urdf", "rover_description.xacro"]
+                    ),
+                ),
+            ],
         )
     )
 

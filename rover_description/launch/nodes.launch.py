@@ -135,8 +135,12 @@ def generate_launch_description():
                     ]
                 ),
             ],
+            # Should match the remaps in the <gazebo> block in rover_description.xacro
             remappings=[
                 ("/controller_manager/robot_description", "/robot_description"),
+                ("/diff_controller/cmd_vel_unstamped", "/core/control/cmd_vel"),
+                ("/diff_controller/odom", "/core/feedback/wheel_odom"),
+                ("/hand_controller/commands", "/arm/control/ik_gripper")
             ],
             # Gazebo runs its own bullshit
             condition=IfCondition(LaunchConfiguration("spawn_controller_manager")),
