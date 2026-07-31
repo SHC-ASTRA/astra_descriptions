@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!-- Renaming this robot can quietly break MoveIt2: the name is coupled to several MoveIt2
+     config filenames across several files in strange, undocumented ways. If you rename,
+     change it in all of these together:
+       - this <robot name> attribute
+       - the <robot name> in arm_moveit_config/config/ASTRA_Arm.srdf and ASTRA_Arm.urdf.xacro
+       - the MoveItConfigsBuilder(...) arg and the ASTRA_Arm.* filenames it resolves, in
+         arm_moveit_config/launch/moveit2.launch.py
+       - the paths recorded in arm_moveit_config/.setup_assistant
+     The inter-dependency theoretically comes from MoveIt2's SRDF loader and its config builder. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ASTRA_Arm">
+    <xacro:arg name="hardware_mode" default="preview" />
+    <!-- rover_description owns the combined gz_ros2_control plugin below, so suppress
+         core's by default; standalone core sim sets it true. -->
+    <xacro:arg name="add_core_gz_ros2_control" default="false" />
+
+    <!-- Import Arm Xacro file -->
+    <xacro:include filename="$(find arm_moveit_config)/config/ASTRA_Arm.urdf.xacro" />
+
+    <!-- Import Core Xacro file -->
+    <xacro:include filename="$(find core_description)/urdf/core_description.xacro" />
+
+    <!-- Attach Arm to Core -->
+    <joint name="arm_core_joint" type="fixed">
+        <origin
+            xyz="0.13 -0.035 0.227"
+            rpy="0 0 1.5708" />
+        <parent
+            link="base_link" />
+        <child
+            link="arm_base_link" />
+    </joint>
+
+    <!-- Declare a singular ros2_control plugin for Gazebo with the controllers required
+         for both Core and Arm. -->
+    <xacro:if value="${'$(arg hardware_mode)' == 'gazebo'}">
+        <gazebo>
+            <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                <parameters>$(find core_description)/config/ros2_controllers.yaml</parameters>
+                <parameters>$(find arm_moveit_config)/config/ros2_controllers.yaml</parameters>
+                <ros>
+                    <remapping>/diff_controller/cmd_vel_unstamped:=/core/control/cmd_vel</remapping>
+                    <remapping>/diff_controller/odom:=/core/feedback/wheel_odom</remapping>
+                    <remapping>/hand_controller/commands:=/arm/control/ik_gripper</remapping>
+                </ros>
+            </plugin>
+        </gazebo>
+    </xacro:if>
+
+</robot>

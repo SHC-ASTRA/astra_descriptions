@@ -8,7 +8,7 @@ controller_manager:
 
 
     hand_controller:
-      type: position_controllers/GripperActionController
+      type: velocity_controllers/JointGroupVelocityController
 
 
     joint_state_broadcaster:
@@ -30,20 +30,49 @@ astra_arm_controller:
     - position
     - velocity
     allow_nonzero_velocity_at_trajectory_end: true
+    # TODO: tune per-joint PID on the real arm. The velocity command interface makes JTC
+    # run a per-joint PID; with p=i=d=0 it is feedforward-only (ff_velocity_scale) and does
+    # not correct position error. Tuning order: raise p, add d to damp, then i/i_clamp for
+    # steady-state.
     gains:
       axis_0_joint:
+        p: 0.0
+        i: 0.0
+        d: 0.0
+        i_clamp: 0.0
         ff_velocity_scale: 1.0
       axis_1_joint:
+        p: 0.0
+        i: 0.0
+        d: 0.0
+        i_clamp: 0.0
         ff_velocity_scale: 1.0
       axis_2_joint:
+        p: 0.0
+        i: 0.0
+        d: 0.0
+        i_clamp: 0.0
         ff_velocity_scale: 1.0
       axis_3_joint:
+        p: 0.0
+        i: 0.0
+        d: 0.0
+        i_clamp: 0.0
         ff_velocity_scale: 1.0
       wrist_yaw_joint:
+        p: 0.0
+        i: 0.0
+        d: 0.0
+        i_clamp: 0.0
         ff_velocity_scale: 1.0
       wrist_roll_joint:
+        p: 0.0
+        i: 0.0
+        d: 0.0
+        i_clamp: 0.0
         ff_velocity_scale: 1.0
 
 hand_controller:
   ros__parameters:
-    joint: ef_gripper_left_joint
+    joints:
+    - ef_gripper_left_joint

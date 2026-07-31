@@ -2,7 +2,6 @@
   inputs = {
     nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/master";
     nixpkgs.follows = "nix-ros-overlay/nixpkgs"; # IMPORTANT!!!
-
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -36,18 +35,22 @@
           ];
         };
         rosDistro = "humble";
-
+        treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
       in
       {
         legacyPackages = pkgs.rosPackages;
         packages = builtins.intersectAttrs (import ./overlay.nix null null) pkgs.rosPackages.${rosDistro};
-        checks = builtins.intersectAttrs (import ./overlay.nix null null) pkgs.rosPackages.${rosDistro};
+        checks =
+          (builtins.intersectAttrs (import ./overlay.nix null null) pkgs.rosPackages.${rosDistro})
+          // {
+            formatting = treefmtEval.config.build.check self;
+          };
         devShells.default = import ./shell.nix {
           inherit pkgs rosDistro;
           extraPkgs = { };
           extraPaths = [ ];
         };
-        formatter = (inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix).config.build.wrapper;
+        formatter = treefmtEval.config.build.wrapper;
       }
     );
   nixConfig = {

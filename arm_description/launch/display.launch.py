@@ -1,132 +1,130 @@
-# Author: Addison Sears-Collins
-# Date: September 14, 2021
-# Description: Launch a two-wheeled robot URDF file using Rviz.
-# https://automaticaddison.com
+# Visualize the Arm URDF in RViz.
+#
+# One `mode` argument controls everything:
+#   preview (default) - stand-alone URDF preview: local RSP + joint_state_publisher_gui
+#                       (drag joint sliders) + RViz. Runs in its own ROS_DOMAIN_ID
+#                       (preview_domain_id) so its fake /joint_states and /tf cannot
+#                       interfere with the real rover.
+#   live              - view a running rover/sim: RViz only, on the caller's domain,
+#                       using the rover's /robot_description, /tf and /joint_states.
+#                       Spawns no publishers, so it cannot interfere with the real rover.
+#
+# Unlike core/testbed/rover, arm_description has no nodes.launch.py (no controller/physical/
+# gazebo path of its own), so the RSP/JSP-GUI/RViz nodes are inlined here.
 
-import os
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
-from launch.conditions import IfCondition, UnlessCondition
-from launch.substitutions import Command, LaunchConfiguration
+from launch.actions import DeclareLaunchArgument, SetEnvironmentVariable
+from launch.conditions import IfCondition
+
+# https://docs.ros.org/en/rolling/p/launch/launch.substitutions.html
+from launch.substitutions import (
+    Command,
+    LaunchConfiguration,
+    PathJoinSubstitution,
+    EqualsSubstitution,
+)
 from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
+from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-
-    # Set the path to this package.
     pkg_share = FindPackageShare(package="arm_description").find("arm_description")
 
-    # Set the path to the RViz configuration settings
-    default_rviz_config_path = os.path.join(pkg_share, "config/display.rviz")
-
-    # Set the path to the URDF file
-    default_urdf_model_path = os.path.join(pkg_share, "urdf/ASTRA_Arm.urdf")
-
-    ########### YOU DO NOT NEED TO CHANGE ANYTHING BELOW THIS LINE ##############
-    # Launch configuration variables specific to simulation
-    gui = LaunchConfiguration("gui")
-    urdf_model = LaunchConfiguration("urdf_model")
-    rviz_config_file = LaunchConfiguration("rviz_config_file")
-    use_robot_state_pub = LaunchConfiguration("use_robot_state_pub")
-    use_rviz = LaunchConfiguration("use_rviz")
-    use_sim_time = LaunchConfiguration("use_sim_time")
-
-    # Declare the launch arguments
-    declare_urdf_model_path_cmd = DeclareLaunchArgument(
-        name="urdf_model",
-        default_value=default_urdf_model_path,
-        description="Absolute path to robot urdf file",
-    )
-
-    declare_rviz_config_file_cmd = DeclareLaunchArgument(
-        name="rviz_config_file",
-        default_value=default_rviz_config_path,
-        description="Full path to the RVIZ config file to use",
-    )
-
-    declare_use_joint_state_publisher_cmd = DeclareLaunchArgument(
-        name="gui",
-        default_value="True",
-        description="Flag to enable joint_state_publisher_gui",
-    )
-
-    declare_use_robot_state_pub_cmd = DeclareLaunchArgument(
-        name="use_robot_state_pub",
-        default_value="True",
-        description="Whether to start the robot state publisher",
-    )
-
-    declare_use_rviz_cmd = DeclareLaunchArgument(
-        name="use_rviz", default_value="True", description="Whether to start RVIZ"
-    )
-
-    declare_use_sim_time_cmd = DeclareLaunchArgument(
-        name="use_sim_time",
-        default_value="True",
-        description="Use simulation (Gazebo) clock if true",
-    )
-
-    # Specify the actions
-
-    # Publish the joint state values for the non-fixed joints in the URDF file.
-    start_joint_state_publisher_cmd = Node(
-        condition=UnlessCondition(gui),
-        package="joint_state_publisher",
-        executable="joint_state_publisher",
-        name="joint_state_publisher",
-    )
-
-    # A GUI to manipulate the joint state values
-    start_joint_state_publisher_gui_node = Node(
-        condition=IfCondition(gui),
-        package="joint_state_publisher_gui",
-        executable="joint_state_publisher_gui",
-        name="joint_state_publisher_gui",
-    )
-
-    # Subscribe to the joint states of the robot, and publish the 3D pose of each link.
-    start_robot_state_publisher_cmd = Node(
-        condition=IfCondition(use_robot_state_pub),
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        parameters=[
-            {
-                "use_sim_time": use_sim_time,
-                "robot_description": ParameterValue(
-                    Command(["xacro ", urdf_model]), value_type=str
-                ),
-            }
-        ],
-        arguments=[default_urdf_model_path],
-    )
-
-    # Launch RViz
-    start_rviz_cmd = Node(
-        condition=IfCondition(use_rviz),
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="screen",
-        arguments=["-d", rviz_config_file],
-    )
-
-    # Create the launch description and populate
     ld = LaunchDescription()
 
-    # Declare the launch options
-    ld.add_action(declare_urdf_model_path_cmd)
-    ld.add_action(declare_rviz_config_file_cmd)
-    ld.add_action(declare_use_joint_state_publisher_cmd)
-    ld.add_action(declare_use_robot_state_pub_cmd)
-    ld.add_action(declare_use_rviz_cmd)
-    ld.add_action(declare_use_sim_time_cmd)
+    ####################################################################################
+    # Launch Arguments
 
-    # Add any actions
-    ld.add_action(start_joint_state_publisher_cmd)
-    ld.add_action(start_joint_state_publisher_gui_node)
-    ld.add_action(start_robot_state_publisher_cmd)
-    ld.add_action(start_rviz_cmd)
+    ld.add_action(
+        DeclareLaunchArgument(
+            name="mode",
+            default_value="preview",
+            description=(
+                "'preview' for a sandboxed local URDF preview with slider joint control; "
+                "'live' to view a running rover/sim (RViz only) on the current domain."
+            ),
+        )
+    )
+    ld.add_action(
+        DeclareLaunchArgument(
+            name="preview_domain_id",
+            default_value="10",
+            description=(
+                "ROS_DOMAIN_ID used only in 'preview' mode to sandbox the preview from any "
+                "live rover topics. Must differ from the rover's live ROS_DOMAIN_ID."
+            ),
+        )
+    )
+
+    is_preview = EqualsSubstitution(LaunchConfiguration("mode"), "preview")
+
+    ####################################################################################
+    # Domain isolation (preview only)
+
+    # Sandbox the preview on its own DDS domain so its fake /joint_states and /tf can never
+    # interfere with the live rover. Set before any node is launched so the nodes below inherit it.
+    ld.add_action(
+        SetEnvironmentVariable(
+            name="ROS_DOMAIN_ID",
+            value=LaunchConfiguration("preview_domain_id"),
+            condition=IfCondition(is_preview),
+        )
+    )
+
+    ####################################################################################
+    # Launch Nodes
+
+    # Robot State Publisher (preview only). In 'live' mode we skip it: the rover already
+    # publishes /robot_description and /tf, and a second RSP would be a duplicate TF authority.
+    ld.add_action(
+        Node(
+            package="robot_state_publisher",
+            executable="robot_state_publisher",
+            parameters=[
+                {
+                    "use_sim_time": False,
+                    "robot_description": ParameterValue(
+                        Command(
+                            [
+                                "xacro ",
+                                PathJoinSubstitution(
+                                    [pkg_share, "urdf", "ASTRA_Arm.urdf"]
+                                ),
+                            ]
+                        ),
+                        value_type=str,
+                    ),
+                }
+            ],
+            condition=IfCondition(is_preview),
+        )
+    )
+
+    # Joint State Publisher GUI - publish and graphically modify joint states in preview
+    # mode. In 'live' mode the joint states come from the running rover/sim instead.
+    ld.add_action(
+        Node(
+            package="joint_state_publisher_gui",
+            executable="joint_state_publisher_gui",
+            name="joint_state_publisher_gui",
+            condition=IfCondition(is_preview),
+        )
+    )
+
+    # RViz - always spawned (the whole point of this launch); consumes /robot_description
+    # from the local RSP in preview, or from the live rover/sim in 'live' mode.
+    ld.add_action(
+        Node(
+            package="rviz2",
+            executable="rviz2",
+            name="rviz2",
+            output="screen",
+            arguments=[
+                "-d",
+                PathJoinSubstitution([pkg_share, "config", "display.rviz"]),
+            ],
+        )
+    )
 
     return ld

@@ -13,6 +13,8 @@ Contains URDF files, meshes, launch files, and configurations for Clucky and Tes
   - [Gazebo](#gazebo)
 - [Packages](#packages)
 - [Major To-Do Items](#major-to-do-items)
+- [Troubleshooting](#troubleshooting)
+  - [Log noise](#log-noise)
 - [Maintainer(s)](#maintainers)
 
 ## Software Prerequisites 
@@ -59,10 +61,19 @@ $ source install/setup.bash  # or if you are using zsh: install/setup.zsh
 Here are the main launch commands for these packages:
 
 ```bash
-$ ros2 launch core_description display.launch.py  # View Core URDF in RViz
-$ ros2 launch arm_description display.launch.py   # View Arm URDF in RViz
-$ ros2 launch core_gazebo core.gazebo.launch.py   # Simulate Clucky in Gazebo with diff_drive_controller
-$ ros2 launch arm_moveit_config demo.launch.py    # Run Moveit2 for Arm IK
+  # View a URDF in RViz (either interactively or passively with mode:=preview|live)
+$ ros2 launch core_description display.launch.py
+$ ros2 launch testbed_description display.launch.py
+$ ros2 launch arm_description display.launch.py
+$ ros2 launch rover_description display.launch.py
+
+  # Simulate in Gazebo
+$ ros2 launch core_gazebo core.gazebo.launch.py     # Core only with diff_drive_controller
+$ ros2 launch rover_description gazebo.launch.py    # Full rover; Core + Arm
+
+  # Bring up ros2_control for real hardware (interfaces with anchor over topic_based_ros2_control)
+$ ros2 launch core_description physical.launch.py   # Core only with diff_drive_controller
+$ ros2 launch rover_description physical.launch.py  # Full rover; normally launched via Anchor's rover.launch.py
 ```
 
 ### Gazebo
@@ -85,12 +96,41 @@ $ source install/setup.bash && ros2 launch core_gazebo core.gazebo.launch.py
 - **arm_moveit_config** - Includes configuration and launch files for using Moveit2 with the astra arm.
 - **core_description** - Includes URDF/Xacro files, launch files, and configurations for Core (Clucky, not Testbed).
 - **core_gazebo** - Configuration and launch files for simulating Clucky with Gazebo.
+- **rover_description** - Combines Core and Arm into the full rover; includes launch files for the Gazebo sim and real-hardware ros2_control bringup.
+- **testbed_description** - Like `core_description`, but for Testbed instead of Clucky.
 
 ## Major To-Do Items
 
 - Reduce STL file complexity
 - Add proper textures to Core and Arm
 - Convert Arm to fully Xacro
+
+## Troubleshooting
+
+- **`Switch controller timed out after 5.000000 seconds!`, then `Failed to activate controller`** - Gazebo is taking too long to start
+
+Controller activation only happens inside `controller_manager::update()`, which runs on the sim clock, and Humble hardcodes the 5 s timeout — so fix the sim, not the timeout. Nearly always the model spawned underground and the solver is taking a long time to figure it out. Raise `spawn_z` past the model's lowest collision point:
+
+```bash
+$ ros2 launch core_gazebo core.gazebo.launch.py spawn_z:=1.0
+```
+
+If that isn't it, good luck.
+
+- **`amdgpu: drmGetDevice2 failed.`** — no GPU in the container, so Mesa falls back to llvmpipe
+
+`run_container.sh` passes `/dev/dri` through when the host has it; check `ls /dev/dri` in the container and on the host. NVIDIA-only machines also need the nvidia-container-toolkit. Software rendering still runs, but will be slower and possibly create a fisheyed viewport.
+
+### Log noise
+
+| Message | Why |
+| ------- | --- |
+| `libEGL warning: egl: failed to create dri2 screen` | Only a problem if you have a single GPU. |
+| `amdgpu: os_same_file_description couldn't determine...` | Prints regardless of whether the GPU works. |
+| `groups: cannot find name for group ID 984` | The host's `render`/`video` GIDs, passed in for `/dev/dri` access. Applied fine, just unnamed inside the container. |
+| `kdl_parser: The root link base_link has an inertia specified` | KDL ignores root-link inertia when building TF. Gazebo still uses it. |
+| `IMU sensor 'core_emb_imu_sensor' not found in hardware_info` | The IMU reaches ROS via `gz-sim-imu-system` and `ros_gz_bridge` on `/core/imu/data`, not ros2_control. |
+| `Desired controller update period (0.02 s) is slower than the gazebo simulation period (0.001 s)` |  Controller `update_rate` is 50 Hz against a 1 ms Gazebo step. |
 
 ## Maintainer(s)
 

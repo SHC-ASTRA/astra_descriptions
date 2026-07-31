@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version:   Build Version: 1.6.9612.1828
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="testbed_description">
+
+  <link name="base_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.001" />
+      <inertia
+        ixx="1e-6"
+        ixy="0"
+        ixz="0"
+        iyy="1e-6"
+        iyz="0"
+        izz="1e-6" />
+    </inertial>
+  </link>
+
+  <joint name="chassis_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="chassis_link"/>
+    <origin xyz="0 0 0.15" rpy="0 0 3.142"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+
+  <link
+    name="chassis_link">
+    <inertial>
+      <origin
+        xyz="0.026945 -0.00024286 0.049165"
+        rpy="0 0 0" />
+      <mass
+        value="4.7845" />
+      <inertia
+        ixx="0.044176"
+        ixy="-7.6004E-07"
+        ixz="6.3828E-07"
+        iyy="0.068136"
+        iyz="3.8348E-07"
+        izz="0.1019" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://testbed_description/meshes/chassis_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89412 0.89412 0.89412 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://testbed_description/meshes/chassis_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="fr_wheel_link">
+    <inertial>
+      <origin
+        xyz="3.0025E-07 -4.2143E-07 -0.041517"
+        rpy="0 0 0" />
+      <mass
+        value="2.1868" />
+      <inertia
+        ixx="0.006947"
+        ixy="7.6914E-09"
+        ixz="2.5464E-08"
+        iyy="0.006947"
+        iyz="-3.5564E-08"
+        izz="0.011745" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://testbed_description/meshes/fr_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.25 0.25 0.3 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://testbed_description/meshes/fr_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fr_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="-0.18568 0.20975 -0.038044"
+      rpy="1.5708 1.324 0" />
+    <parent
+      link="chassis_link" />
+    <child
+      link="fr_wheel_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="fl_wheel_link">
+    <inertial>
+      <origin
+        xyz="2.9785E-07 -4.1558E-07 -0.041517"
+        rpy="0 0 0" />
+      <mass
+        value="2.1868" />
+      <inertia
+        ixx="0.006947"
+        ixy="7.6931E-09"
+        ixz="2.5353E-08"
+        iyy="0.006947"
+        iyz="-3.5299E-08"
+        izz="0.011745" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://testbed_description/meshes/fl_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.25 0.25 0.3 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://testbed_description/meshes/fl_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fl_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="-0.18568 -0.20975 -0.038044"
+      rpy="1.5708 -0.54692 3.1416" />
+    <parent
+      link="chassis_link" />
+    <child
+      link="fl_wheel_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="br_wheel_link">
+    <inertial>
+      <origin
+        xyz="2.9785E-07 -4.1558E-07 -0.041517"
+        rpy="0 0 0" />
+      <mass
+        value="2.1868" />
+      <inertia
+        ixx="0.006947"
+        ixy="7.6931E-09"
+        ixz="2.5353E-08"
+        iyy="0.006947"
+        iyz="-3.5299E-08"
+        izz="0.011745" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://testbed_description/meshes/br_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.25 0.25 0.3 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://testbed_description/meshes/br_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="br_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="0.18568 0.20975 -0.038044"
+      rpy="-1.5708 -0.6705 3.1416" />
+    <parent
+      link="chassis_link" />
+    <child
+      link="br_wheel_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="bl_wheel_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="2.1868" />
+      <inertia
+        ixx="1e6"
+        ixy="0"
+        ixz="0"
+        iyy="1e6"
+        iyz="0"
+        izz="1e6" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://testbed_description/meshes/bl_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.25 0.25 0.3 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://testbed_description/meshes/bl_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="bl_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="0.185046620000001 -0.209754935661732 -0.038044120000001"
+      rpy="1.5707963267949 0.0380553768032791 -3.14159265358979" />
+    <parent
+      link="chassis_link" />
+    <child
+      link="bl_wheel_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+</robot>
