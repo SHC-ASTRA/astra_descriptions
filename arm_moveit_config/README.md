@@ -54,75 +54,26 @@ $ source install/setup.bash  # or if you are using zsh: install/setup.zsh
 
 ### Running
 
-ASTRA's full Moveit2 software stack as it currently stands can be invoked by running the following command:
+ASTRA's full MoveIt2 stack as it currently stands can be practically invoked standalone; it can either be simulated in Gazebo or used for the physical rover, both in combination with Core's code, with the following commands:
 
 ```bash
-$ ros2 launch arm_moveit_config demo.launch.py
+  # Simulate combined Core + Arm
+$ ros2 launch rover_description gazebo.launch.py
+  # Run the physical stack for a combined Core + Arm
+$ ros2 launch rover_description physical.launch.py
 ```
+
+`moveit2.launch.py` (move_group + moveit_servo) can still be included on its own for the physical arm; the rover launches supply its `hardware_mode` and combined URDF.
 
 #### Switching between sim and real hardware
 
-Whether Moveit2 controls mock simulated hardware or the real arm is controlled by the state of two files: `config/ASTRA_Arm.ros2_control.xacro` and `launch/spawn_controllers.launch.py`. Work is being done to make this switching easier and more centralized, but for now, here is how you can tell which one you are using and how to switch:
+The ros2_control backend is selected by the `hardware_mode` xacro/launch argument. The mapping lives in `config/ASTRA_Arm.ros2_control.xacro`:
 
-- **To use mock simulated hardware:**
+- `hardware_mode:=gazebo` — `gz_ros2_control/GazeboSimSystem` (only as part of the rover sim).
+- `hardware_mode:=physical` — `topic_based_ros2_control/TopicBasedSystem`, interfacing with `anchor` (`/arm/joint_commands` out, `/joint_states` in) to drive the real arm.
+- `hardware_mode:=preview` — geometry only, no `<ros2_control>` block (for URDF/RViz preview).
 
-> `launch/spawn_controllers.launch.py` (line 35)
-```py
-...
-def generate_launch_description():
-    ...
-    # * Uncomment the following when using mock_components simulation hardware
-    controller_names += ["joint_state_broadcaster"]
-    ...
-```
-
-> `config/ASTRA_Arm.ros2_control.xacro` (line 7)
-```xml
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-    ...
-        <ros2_control name="${name}" type="system">
-            <hardware>
-                <!-- By default, set up controllers for simulation. This won't work on real hardware -->
-                <plugin>mock_components/GenericSystem</plugin>
-                <param name="calculate_dynamics">true</param>
-                <!-- <plugin>topic_based_ros2_control/TopicBasedSystem</plugin> -->
-                <!-- <param name="joint_commands_topic">/joint_commands</param> -->
-                <!-- <param name="joint_states_topic">/joint_states</param> -->
-                <!-- <param name="trigger_joint_command_threshold">1e-5</param> -->  <!-- Set to -1 to disable -->
-                <!-- <param name="sum_wrapped_joint_states">false</param> -->
-            </hardware>
-            ...
-```
-
-- **To use real hardware:**
-
-> `launch/spawn_controllers.launch.py` (line 35)
-```py
-...
-def generate_launch_description():
-    ...
-    # * Uncomment the following when using mock_components simulation hardware
-    # controller_names += ["joint_state_broadcaster"]
-    ...
-```
-
-> `config/ASTRA_Arm.ros2_control.xacro` (line 7)
-```xml
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-    ...
-        <ros2_control name="${name}" type="system">
-            <hardware>
-                <!-- By default, set up controllers for simulation. This won't work on real hardware -->
-                <!-- <plugin>mock_components/GenericSystem</plugin> -->
-                <!-- <param name="calculate_dynamics">true</param> -->
-                <plugin>topic_based_ros2_control/TopicBasedSystem</plugin>
-                <param name="joint_commands_topic">/joint_commands</param>
-                <param name="joint_states_topic">/joint_states</param>
-                <param name="trigger_joint_command_threshold">1e-5</param>  <!-- Set to -1 to disable -->
-                <param name="sum_wrapped_joint_states">false</param>
-            </hardware>
-            ...
-```
+An unrecognized `hardware_mode` fails at xacro expansion rather than silently emitting an invalid controller setup.
 
 ## File Structure
 
@@ -131,15 +82,15 @@ def generate_launch_description():
    - **ASTRA_Arm.ros2_control.xacro** - ros2_control tags for the arm's urdf
    - **ASTRA_Arm.srdf** - Provides Moveit2 some misc. information about the arm
    - **ASTRA_Arm.urdf.xacro** - Combines the URDF file from `arm_description` and Moveit's xacro files into one xacro file.
-   - **initial_positions.yaml** - Used by `ASTRA_Arm.ros2_control.xacro` for mock hardware
+   - **initial_positions.yaml** - Startup joint positions, used by `ASTRA_Arm.ros2_control.xacro` as `state_interface` initial values
    - **joint_limits** - Velocity and acceleration limits for each joint, required by Moveit2's motion planner
    - **kinematics.yaml** - Tells Moveit2 what IK solver to use
    - **moveit_controllers** - Tells Moveit2 what controllers are being used
-   - **moveit.rviz** - rviz2 config used by `demo.launch.py`
+   - **moveit.rviz** - rviz2 config for viewing the move_group state
    - **pilz_cartesian_limits.yaml** - Limits for the motion planner (idfk man :sob:)
    - **ros2_controllers.yaml** - Tells the controller manager how to spawn and configure the required ros2 controllers
  - `launch/`
-   - **demo.launch.py** - Launches everything for Moveit2 using the other launch files in the same folder, including static_transform_publisher, robot_state_publisher, rviz2, Moveit2 core binaries, moveit_servo, ros2_control, and ros2_joy
+   - **moveit2.launch.py** - Launches the arm's MoveIt2 core (move_group + moveit_servo); included by the rover Gazebo sim and physical launches
    - **spawn_controllers.launch.py** - Launches all ros2 controllers for Moveit2
 
 ## Graphs

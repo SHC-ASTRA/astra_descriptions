@@ -80,7 +80,7 @@ def generate_launch_description():
 
     # Controllers handled by rover_description launch
 
-    # Uses default values from moveit2 generated move_group.launch.py
+    # Mirrors the defaults MoveIt2's setup assistant generates for the move_group node
     move_group_configuration = {
         "publish_robot_description_semantic": True,
         "allow_trajectory_execution": True,
@@ -96,7 +96,8 @@ def generate_launch_description():
     }
 
     # Moveit2 move group - Use move_group node directly with custom robot_description
-    # (Cannot use auto-generated move_group.launch.py since it doesn't accept robot_description override)
+    # (the setup-assistant's generated move_group launch can't accept a robot_description
+    # override, so we run the node directly here instead)
     ld.add_action(
         Node(
             package="moveit_ros_move_group",
