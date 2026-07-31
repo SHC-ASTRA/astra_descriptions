@@ -59,10 +59,19 @@ $ source install/setup.bash  # or if you are using zsh: install/setup.zsh
 Here are the main launch commands for these packages:
 
 ```bash
-$ ros2 launch core_description display.launch.py  # View Core URDF in RViz
-$ ros2 launch arm_description display.launch.py   # View Arm URDF in RViz
-$ ros2 launch core_gazebo core.gazebo.launch.py   # Simulate Clucky in Gazebo with diff_drive_controller
-$ ros2 launch arm_moveit_config demo.launch.py    # Run Moveit2 for Arm IK
+  # View a URDF in RViz (either interactively or passively with mode:=preview|live)
+$ ros2 launch core_description display.launch.py
+$ ros2 launch testbed_description display.launch.py
+$ ros2 launch arm_description display.launch.py
+$ ros2 launch rover_description display.launch.py
+
+  # Simulate in Gazebo
+$ ros2 launch core_gazebo core.gazebo.launch.py     # Core only with diff_drive_controller
+$ ros2 launch rover_description gazebo.launch.py    # Full rover; Core + Arm
+
+  # Bring up ros2_control for real hardware (interfaces with anchor over topic_based_ros2_control)
+$ ros2 launch core_description physical.launch.py   # Core only with diff_drive_controller
+$ ros2 launch rover_description physical.launch.py  # Full rover; normally launched via Anchor's rover.launch.py
 ```
 
 ### Gazebo
@@ -85,6 +94,8 @@ $ source install/setup.bash && ros2 launch core_gazebo core.gazebo.launch.py
 - **arm_moveit_config** - Includes configuration and launch files for using Moveit2 with the astra arm.
 - **core_description** - Includes URDF/Xacro files, launch files, and configurations for Core (Clucky, not Testbed).
 - **core_gazebo** - Configuration and launch files for simulating Clucky with Gazebo.
+- **rover_description** - Combines Core and Arm into the full rover; includes launch files for the Gazebo sim and real-hardware ros2_control bringup.
+- **testbed_description** - Like `core_description`, but for Testbed instead of Clucky.
 
 ## Major To-Do Items
 
