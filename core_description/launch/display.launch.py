@@ -84,7 +84,7 @@ def generate_launch_description():
                 PathJoinSubstitution([pkg_share, "launch", "nodes.launch.py"])
             ),
             launch_arguments={
-                ("hardware_mode", "preview"),  # geometry only; we never control from here
+                ("hardware_mode", "preview"),  # geometry only, no control
                 ("spawn_rsp", is_preview),
                 ("spawn_controller_manager", "false"),
                 ("spawn_controllers", "false"),
