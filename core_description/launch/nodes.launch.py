@@ -5,7 +5,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import (
     Command,
     LaunchConfiguration,
@@ -122,13 +122,7 @@ def generate_launch_description():
             package="controller_manager",
             executable="ros2_control_node",
             parameters=[
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("core_description"),
-                        "config",
-                        "ros2_controllers.yaml",
-                    ]
-                ),
+                PathJoinSubstitution([pkg_share, "config", "ros2_controllers.yaml"]),
             ],
             remappings=[
                 ("/controller_manager/robot_description", "/robot_description"),
@@ -144,11 +138,7 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 PathJoinSubstitution(
-                    [
-                        FindPackageShare("core_description"),
-                        "launch",
-                        "spawn_controllers.launch.py",
-                    ]
+                    [pkg_share, "launch", "spawn_controllers.launch.py"]
                 )
             ),
             launch_arguments={("hardware_mode", LaunchConfiguration("hardware_mode"))},
@@ -169,6 +159,19 @@ def generate_launch_description():
             ],
             # Basically everything that uses this launch file wants RViz unless you don't
             condition=IfCondition(LaunchConfiguration("spawn_rviz")),
+        )
+    )
+
+    # Localization
+    ld.add_action(
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                PathJoinSubstitution([pkg_share, "launch", "localization.launch.py"])
+            ),
+            launch_arguments=[("hardware_mode", LaunchConfiguration("hardware_mode"))],
+            condition=UnlessCondition(
+                EqualsSubstitution(LaunchConfiguration("hardware_mode"), "preview")
+            ),
         )
     )
 
