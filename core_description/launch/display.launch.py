@@ -104,4 +104,50 @@ def generate_launch_description():
         )
     )
 
+    # Robot Localization EKF
+    ld.add_action(
+        Node(
+            package="robot_localization",
+            executable="ekf_node",
+            name="ekf_local_node",
+            output="screen",
+            parameters=[os.path.join(pkg_share, "config/ekf_local.yaml")],
+            remappings=[
+                ("odometry/filtered", "/odometry/local"),
+            ],
+        )
+    )
+
+    # NavSat Transform Node
+    ld.add_action(
+        Node(
+            package="robot_localization",
+            executable="navsat_transform_node",
+            name="navsat_transform_node",
+            output="screen",
+            parameters=[os.path.join(pkg_share, "config/navsat.yaml")],
+            remappings=[
+                ("imu", "/core/imu/data"),
+                ("gps/fix", "/core/gps/fix"),
+                ("odometry/filtered", "/odometry/local"),
+                ("odometry/gps", "/odometry/gps"),
+                ("gps/filtered", "/gps/filtered"),
+            ],
+        )
+    )
+
+    # Robot Localization EKF global
+    ld.add_action(
+        Node(
+            package="robot_localization",
+            executable="ekf_node",
+            name="ekf_global_node",
+            output="screen",
+            parameters=[os.path.join(pkg_share, "config/ekf_global.yaml")],
+            remappings=[
+                ("odometry/filtered", "/odometry/global"),
+            ],
+        )
+    )
+
     return ld

@@ -100,10 +100,10 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-0.38"
-      upper="0.38"
-      effort="0"
-      velocity="0" />
+      lower="0"
+      upper="0"
+      effort="50"
+      velocity="1.5" />
   </joint>
 
   <link
@@ -270,10 +270,10 @@
     <axis
       xyz="0 0 -1" />
     <limit
-      lower="-0.38"
-      upper="0.38"
-      effort="0"
-      velocity="0" />
+      lower="0"
+      upper="0"
+      effort="50"
+      velocity="1.5" />
     <mimic
       joint="left_suspension_joint"
       multiplier="1"
@@ -444,10 +444,10 @@
     <axis
       xyz="0 -1 0" />
     <limit
-      lower="-0.38"
-      upper="0.38"
-      effort="0"
-      velocity="0" />
+      lower="0"
+      upper="0"
+      effort="50"
+      velocity="1.5" />
     <mimic
       joint="left_suspension_joint"
       multiplier="-1"
