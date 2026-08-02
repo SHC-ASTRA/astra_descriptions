@@ -54,7 +54,16 @@ def generate_launch_description():
             executable="ekf_node",
             name="ekf_local_node",
             output="screen",
-            parameters=[PathJoinSubstitution([pkg_share, "config/ekf_local.yaml"])],
+            parameters=[
+                PathJoinSubstitution([pkg_share, "config/ekf_local.yaml"]),
+                {
+                    "use_sim_time": ParameterValue(
+                        EqualsSubstitution(
+                            LaunchConfiguration("hardware_mode"), "gazebo"
+                        )
+                    ),
+                },
+            ],
             remappings=[
                 ("odometry/filtered", "/odometry/local"),
             ],
@@ -68,7 +77,16 @@ def generate_launch_description():
             executable="navsat_transform_node",
             name="navsat_transform_node",
             output="screen",
-            parameters=[PathJoinSubstitution([pkg_share, "config/navsat.yaml"])],
+            parameters=[
+                PathJoinSubstitution([pkg_share, "config/navsat.yaml"]),
+                {
+                    "use_sim_time": ParameterValue(
+                        EqualsSubstitution(
+                            LaunchConfiguration("hardware_mode"), "gazebo"
+                        )
+                    ),
+                },
+            ],
             remappings=[
                 ("imu", "/core/feedback/imu/data"),
                 ("gps/fix", "/core/feedback/gps/fix"),
@@ -86,7 +104,16 @@ def generate_launch_description():
             executable="ekf_node",
             name="ekf_global_node",
             output="screen",
-            parameters=[PathJoinSubstitution([pkg_share, "config/ekf_global.yaml"])],
+            parameters=[
+                PathJoinSubstitution([pkg_share, "config/ekf_global.yaml"]),
+                {
+                    "use_sim_time": ParameterValue(
+                        EqualsSubstitution(
+                            LaunchConfiguration("hardware_mode"), "gazebo"
+                        )
+                    ),
+                },
+            ],
             remappings=[
                 ("odometry/filtered", "/odometry/global"),
             ],

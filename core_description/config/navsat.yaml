@@ -1,6 +1,5 @@
 navsat_transform_node:
     ros__parameters:
-        use_sim_time: true
         frequency: 10.0
         delay: 0.0
 

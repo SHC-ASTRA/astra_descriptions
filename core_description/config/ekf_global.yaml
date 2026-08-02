@@ -1,6 +1,5 @@
 ekf_global_node:
   ros__parameters:
-    use_sim_time: true
     frequency: 30.0
     sensor_timeout: 0.2
     two_d_mode: true

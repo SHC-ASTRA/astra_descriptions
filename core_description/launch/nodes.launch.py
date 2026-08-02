@@ -153,6 +153,15 @@ def generate_launch_description():
             executable="rviz2",
             name="rviz2",
             output="screen",
+            parameters=[
+                {
+                    "use_sim_time": ParameterValue(
+                        EqualsSubstitution(
+                            LaunchConfiguration("hardware_mode"), "gazebo"
+                        )
+                    ),
+                }
+            ],
             arguments=[
                 "-d",
                 PathJoinSubstitution([pkg_share, "config", "display.rviz"]),
