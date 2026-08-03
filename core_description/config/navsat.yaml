@@ -4,7 +4,11 @@ navsat_transform_node:
         delay: 0.0
 
         # Update declination from http://www.ngdc.noaa.gov/geomag-web/
-        magnetic_declination_radians: 0.1737602679 # rads
+        # TODO: verify sign (currently CCW-positive in ENU)
+        # UAH  (02 AUG 26): 4.32°  W  ± 0.34°  changing by  0.06° W per year
+        # MDRS (31 MAY 27): 10.04° E  ± 0.35°  changing by  0.08° W per year
+        magnetic_declination_radians: 0.0754 # rad  (UAH)
+        # magnetic_declination_radians: -0.1752 # rad  (MDRS)
         yaw_offset: 0.0 # IMU's yaw, once the magentic_declination_radians value is added to it
 
         zero_altitude: true
