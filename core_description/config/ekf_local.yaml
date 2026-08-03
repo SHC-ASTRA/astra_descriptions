@@ -1,12 +1,18 @@
 # Config for robot_localization's ekf_node for fusing odometry and IMU data
 # https://docs.ros.org/en/noetic/api/robot_localization/html/state_estimation_nodes.html
 
+# Boolean matrix: X, Y, Z,
+#                 roll, pitch, yaw,
+#                 X˙, Y˙, Z˙,
+#                 roll˙, pitch˙, yaw˙,
+#                 X¨, Y¨, Z¨
+
 ekf_local_node:
     ros__parameters:
         frequency: 30.0
-        sensor_timeout: 0.1
+        sensor_timeout: 1.0
 
-        two_d_mode: true  # Core will drive over uneven terrain, antenna should use 2D
+        two_d_mode: true
         publish_acceleration: true
         publish_tf: true
 

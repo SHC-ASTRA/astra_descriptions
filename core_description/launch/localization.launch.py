@@ -5,11 +5,7 @@
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.actions import IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.conditions import IfCondition
 from launch.substitutions import (
-    Command,
     LaunchConfiguration,
     EqualsSubstitution,
     PathJoinSubstitution,
@@ -90,9 +86,7 @@ def generate_launch_description():
             remappings=[
                 ("imu", "/core/feedback/imu/data"),
                 ("gps/fix", "/core/feedback/gps/fix"),
-                ("odometry/filtered", "/odometry/local"),
-                ("odometry/gps", "/odometry/gps"),
-                ("gps/filtered", "/gps/filtered"),
+                ("odometry/filtered", "/odometry/global"),
             ],
         )
     )
