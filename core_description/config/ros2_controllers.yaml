@@ -13,7 +13,7 @@ diff_controller:
     left_wheel_names: ["bl_wheel_joint", "fl_wheel_joint"]
     right_wheel_names: ["br_wheel_joint", "fr_wheel_joint"]
 
-    wheel_separation: 0.836  # TODO: fix
+    wheel_separation: 0.836  # TODO: re-measure
     wheels_per_side: 2
     wheel_radius: 0.171
 
@@ -23,7 +23,7 @@ diff_controller:
 
     position_feedback: true
     open_loop: false
-    enable_odom_tf: true
+    enable_odom_tf: false
 
     cmd_vel_timeout: 1.0
     publish_limited_velocity: false

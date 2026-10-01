@@ -4,7 +4,12 @@ from pathlib import Path
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration, Command, PathJoinSubstitution
+from launch.substitutions import (
+    Command,
+    EqualsSubstitution,
+    LaunchConfiguration,
+    PathJoinSubstitution,
+)
 
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
@@ -58,6 +63,12 @@ def generate_launch_description():
         )
     )
 
+    use_sim_time = {
+        "use_sim_time": ParameterValue(
+            EqualsSubstitution(LaunchConfiguration("hardware_mode"), "gazebo")
+        )
+    }
+
     # Build robot_description from the specified file
     robot_description_config = ParameterValue(
         Command(
@@ -107,6 +118,7 @@ def generate_launch_description():
                 moveit_config.to_dict(),
                 move_group_configuration,
                 {"robot_description": robot_description_config},
+                use_sim_time,
             ],
         )
     )
@@ -135,6 +147,7 @@ def generate_launch_description():
                 servo_params,
                 moveit_config.robot_description_semantic,
                 moveit_config.robot_description_kinematics,
+                use_sim_time,
             ],
             output="screen",
         )

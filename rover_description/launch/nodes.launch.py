@@ -5,7 +5,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import (
     Command,
     LaunchConfiguration,
@@ -188,12 +188,40 @@ def generate_launch_description():
             executable="rviz2",
             name="rviz2",
             output="screen",
+            parameters=[
+                {
+                    "use_sim_time": ParameterValue(
+                        EqualsSubstitution(
+                            LaunchConfiguration("hardware_mode"), "gazebo"
+                        )
+                    ),
+                }
+            ],
             arguments=[
                 "-d",
                 PathJoinSubstitution([pkg_share, "config", "display.rviz"]),
             ],
             # Basically everything that uses this launch file wants RViz unless you don't
             condition=IfCondition(LaunchConfiguration("spawn_rviz")),
+        )
+    )
+
+    # Localization
+    ld.add_action(
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                PathJoinSubstitution(
+                    [
+                        FindPackageShare("core_description"),
+                        "launch",
+                        "localization.launch.py",
+                    ]
+                )
+            ),
+            launch_arguments=[("hardware_mode", LaunchConfiguration("hardware_mode"))],
+            condition=UnlessCondition(
+                EqualsSubstitution(LaunchConfiguration("hardware_mode"), "preview")
+            ),
         )
     )
 

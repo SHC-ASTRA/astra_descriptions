@@ -129,7 +129,7 @@ If that isn't it, good luck.
 | `amdgpu: os_same_file_description couldn't determine...` | Prints regardless of whether the GPU works. |
 | `groups: cannot find name for group ID 984` | The host's `render`/`video` GIDs, passed in for `/dev/dri` access. Applied fine, just unnamed inside the container. |
 | `kdl_parser: The root link base_link has an inertia specified` | KDL ignores root-link inertia when building TF. Gazebo still uses it. |
-| `IMU sensor 'core_emb_imu_sensor' not found in hardware_info` | The IMU reaches ROS via `gz-sim-imu-system` and `ros_gz_bridge` on `/core/imu/data`, not ros2_control. |
+| `IMU sensor 'core_emb_imu_sensor' not found in hardware_info` | The IMU reaches ROS via `gz-sim-imu-system` and `ros_gz_bridge` on `/core/feedback/imu/data`, not ros2_control. |
 | `Desired controller update period (0.02 s) is slower than the gazebo simulation period (0.001 s)` |  Controller `update_rate` is 50 Hz against a 1 ms Gazebo step. |
 
 ## Maintainer(s)

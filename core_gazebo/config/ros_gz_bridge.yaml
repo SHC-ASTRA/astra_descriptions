@@ -7,7 +7,7 @@
   lazy: true # Determines whether connections are created immediately at startup (when false) or only when data is actually requested by a subscriber (when true), helping to conserve system resources at the cost of potential initial delays in data flow.
 
 # IMU configuration
-- ros_topic_name: "core/imu/data"
+- ros_topic_name: "core/feedback/imu/data"
   gz_topic_name: "imu/data"
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
@@ -15,7 +15,7 @@
   lazy: false
 
 # GPS configuration
-- ros_topic_name: "core/gps/fix"
+- ros_topic_name: "core/feedback/gps/fix"
   gz_topic_name: "gps/fix"
   ros_type_name: "sensor_msgs/msg/NavSatFix"
   gz_type_name: "gz.msgs.NavSat"
