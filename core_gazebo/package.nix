@@ -32,7 +32,7 @@ buildRosPackage rec {
     controller-manager
     diff-drive-controller
     geometry2
-    ign-ros2-control
+    gz-ros2-control
     robot-state-publisher
     ros-gz
     ros2-control

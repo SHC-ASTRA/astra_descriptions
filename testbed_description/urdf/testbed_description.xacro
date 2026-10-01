@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="testbed_rover">
+  <xacro:arg name="hardware_mode" default="gazebo"/>
+
+  <xacro:include filename="testbed_description.urdf"/>
+
+  <xacro:include filename="ros2_control.xacro"/>
+
+  <xacro:testbed_ros2_control hardware_mode="$(arg hardware_mode)"/>
+
+</robot>

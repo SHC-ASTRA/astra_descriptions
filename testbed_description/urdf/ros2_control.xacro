@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="testbed_ros2_control" params="hardware_mode">
+
+        <ros2_control name="TestbedSystem" type="system">
+            <hardware>
+                <xacro:if value="${hardware_mode == 'gazebo'}">
+                    <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+                </xacro:if>
+                <xacro:unless value="${hardware_mode == 'gazebo'}">
+                    <!-- Use topic_based_ros2_control to interface with anchor and control real hardware -->
+                    <plugin>topic_based_ros2_control/TopicBasedSystem</plugin>
+                    <param name="joint_commands_topic">/core/joint_commands</param>
+                    <param name="joint_states_topic">/joint_states</param>
+                    <param name="trigger_joint_command_threshold">-1</param>  <!-- Set to -1 to disable -->
+                    <param name="sum_wrapped_joint_states">true</param>
+                </xacro:unless>
+            </hardware>
+            <joint name="bl_wheel_joint">
+                <command_interface name="velocity"/>
+                <state_interface name="velocity"/>
+                <state_interface name="position"/>
+            </joint>
+            <joint name="br_wheel_joint">
+                <command_interface name="velocity"/>
+                <state_interface name="velocity"/>
+                <state_interface name="position"/>
+            </joint>
+            <joint name="fl_wheel_joint">
+                <command_interface name="velocity"/>
+                <state_interface name="velocity"/>
+                <state_interface name="position"/>
+            </joint>
+            <joint name="fr_wheel_joint">
+                <command_interface name="velocity"/>
+                <state_interface name="velocity"/>
+                <state_interface name="position"/>
+            </joint>
+        </ros2_control>
+
+        <xacro:if value="${hardware_mode == 'gazebo'}">
+            <gazebo>
+                <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                    <parameters>$(find testbed_description)/config/ros2_controllers.yaml</parameters>
+                    <ros>
+                        <remapping>/diff_controller/cmd_vel_unstamped:=/core/control/cmd_vel</remapping>
+                    </ros>
+                </plugin>
+            </gazebo>
+        </xacro:if>
+
+    </xacro:macro>
+</robot>

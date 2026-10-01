@@ -1,26 +1,9 @@
 from moveit_configs_utils import MoveItConfigsBuilder
-from moveit_configs_utils.launches import generate_spawn_controllers_launch
-
-import os
 
 from launch import LaunchDescription
-from launch.actions import (
-    DeclareLaunchArgument,
-    IncludeLaunchDescription,
-)
-from launch.conditions import IfCondition
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PythonExpression
+from launch.actions import DeclareLaunchArgument
 
 from launch_ros.actions import Node
-from launch_ros.parameter_descriptions import ParameterValue
-
-from srdfdom.srdf import SRDF
-
-from moveit_configs_utils.launch_utils import (
-    add_debuggable_node,
-    DeclareBooleanLaunchArg,
-)
 
 
 def generate_launch_description():
@@ -34,30 +17,14 @@ def generate_launch_description():
 
     ld = LaunchDescription()
 
+    # Declared for parity with the other spawn_controllers launches (other launches pass it in).
+    # The arm's controllers are the same across gazebo and physical; the joint_state_broadcaster
+    # is spawned once by core (Gazebo) or the arm node publishes /joint_states directly (physical).
     ld.add_action(
         DeclareLaunchArgument(
             "hardware_mode",
-            default_value="mock_components",
-            description="Hardware mode: 'mock_components' for simulation, 'physical' for real hardware",
-        )
-    )
-
-    # Spawn joint_state_broadcaster only when using simulated hardware (mock_components)
-    ld.add_action(
-        Node(
-            package="controller_manager",
-            executable="spawner",
-            arguments=["joint_state_broadcaster"],
-            output="screen",
-            condition=IfCondition(
-                PythonExpression(
-                    [
-                        "'",
-                        LaunchConfiguration("hardware_mode"),
-                        "' == 'mock_components'",
-                    ]
-                )
-            ),
+            default_value="preview",
+            description="Hardware mode: 'gazebo' for simulation, 'physical' for real hardware",
         )
     )
 

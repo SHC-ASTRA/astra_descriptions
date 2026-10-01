@@ -27,6 +27,7 @@ buildRosPackage rec {
     ros2-control
     rviz2
     xacro
+    # robot-localization  # only available in nix-ros-experiments
   ];
 
   meta = {

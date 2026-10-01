@@ -15,6 +15,7 @@ pkgs.mkShell {
       wrapPrograms = false;
       paths = [
         pkgs.colcon
+        pkgs.yq-go
         pkgs.rosPackages.${rosDistro}.ros-core
 
         # Work around https://github.com/lopsided98/nix-ros-overlay/pull/624
@@ -34,7 +35,7 @@ pkgs.mkShell {
           controller-manager
           diff-drive-controller
           geometry2
-          #ign-ros2-control
+          #gz-ros2-control
           joint-state-publisher
           joint-state-publisher-gui
           joint-trajectory-controller
