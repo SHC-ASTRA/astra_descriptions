@@ -1,0 +1,209 @@
+# Creates a Gazebo simulation for the rover.
+
+import os
+from launch import Action, LaunchContext, LaunchDescription
+from launch.actions import (
+    AppendEnvironmentVariable,
+    DeclareLaunchArgument,
+    IncludeLaunchDescription,
+    OpaqueFunction,
+)
+from launch.conditions import IfCondition
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
+
+
+def generate_launch_description():
+    pkg_ros_gz_sim = FindPackageShare(package="ros_gz_sim").find("ros_gz_sim")
+    pkg_share_gazebo = FindPackageShare(package="rover_description").find(
+        "rover_description"
+    )
+    # TODO: remove (move all the gazebo stuff into this package)
+    pkg_share_description = FindPackageShare(package="core_description").find(
+        "core_description"
+    )
+
+    ld = LaunchDescription()
+
+    gazebo_models_path = os.path.join(pkg_share_gazebo, "models")
+    default_ros_gz_bridge_config_file_path = os.path.join(
+        pkg_share_gazebo, "config/ros_gz_bridge.yaml"
+    )
+
+    ####################################################################################
+    # Launch Arguments
+
+    ld.add_action(
+        DeclareLaunchArgument(
+            name="spawn_rviz",
+            default_value="true",
+            description="Whether to spawn RViz for URDF and TF2 visualization.",
+        )
+    )
+
+    ld.add_action(
+        DeclareLaunchArgument(
+            name="use_camera",
+            default_value="false",
+            description="Flag to enable the RGBD camera for Gazebo point cloud simulation",
+        )
+    )
+
+    ld.add_action(
+        DeclareLaunchArgument(
+            name="world_file",
+            default_value="pick_and_place_demo.world",
+            description="World file name (e.g., simple_demo.world, pick_and_place_demo.world)",
+        )
+    )
+
+    ld.add_action(
+        DeclareLaunchArgument(
+            name="spawn_z",
+            default_value="0.5",
+            description="Model height at spawn (m).",
+        )
+    )
+
+    ####################################################################################
+    # Launch Nodes
+
+    ld.add_action(
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                PathJoinSubstitution([pkg_share_gazebo, "launch", "nodes.launch.py"])
+            ),
+            launch_arguments={
+                ("hardware_mode", "gazebo"),
+                ("spawn_rsp", "true"),
+                ("spawn_controller_manager", "false"),
+                ("spawn_controllers", "true"),
+                ("spawn_rviz", LaunchConfiguration("spawn_rviz")),
+            },
+        )
+    )
+
+    # Arm IK
+    ld.add_action(
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                PathJoinSubstitution(
+                    [
+                        FindPackageShare("arm_moveit_config").find("arm_moveit_config"),
+                        "launch",
+                        "moveit2.launch.py",
+                    ]
+                )
+            ),
+            launch_arguments=[
+                ("hardware_mode", "gazebo"),
+                # Pass the Core+Arm URDF to MoveIt2 so it doesn't freak the fuck out
+                (
+                    "robot_description_file",
+                    PathJoinSubstitution(
+                        [pkg_share_gazebo, "urdf", "rover_description.xacro"]
+                    ),
+                ),
+            ],
+        )
+    )
+
+    # Set Gazebo model path - include both models directory and ROS packages
+    ld.add_action(
+        AppendEnvironmentVariable("GZ_SIM_RESOURCE_PATH", gazebo_models_path),
+    )
+
+    # Add ROS packages path so Gazebo can resolve package:// URIs
+    ld.add_action(
+        AppendEnvironmentVariable(
+            "GZ_SIM_RESOURCE_PATH", os.path.dirname(pkg_share_description)
+        )
+    )
+
+    ld.add_action(
+        AppendEnvironmentVariable(
+            "GZ_SIM_RESOURCE_PATH",
+            os.path.dirname(
+                FindPackageShare(package="arm_description").find("arm_description")
+            ),
+        )
+    )
+
+    # Gazebo
+    world_path = PathJoinSubstitution(
+        [pkg_share_gazebo, "worlds", LaunchConfiguration("world_file")]
+    )
+    ld.add_action(
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                PathJoinSubstitution([pkg_ros_gz_sim, "launch", "gz_sim.launch.py"])
+            ),
+            launch_arguments=[
+                ("gz_args", [" -r -v 3 --render-engine ogre2 ", world_path])
+            ],
+        )
+    )
+
+    # Bridge ROS topics and Gazebo messages for establishing communication
+    ld.add_action(
+        Node(
+            package="ros_gz_bridge",
+            executable="parameter_bridge",
+            parameters=[{"config_file": default_ros_gz_bridge_config_file_path}],
+            output="screen",
+        )
+    )
+
+    # Bridge with optimizations to minimize latency and bandwidth when streaming image data
+    ld.add_action(
+        Node(
+            package="ros_gz_image",
+            executable="image_bridge",
+            arguments=[
+                "/camera_head/image",
+            ],
+            remappings=[
+                ("/camera_head/image", "/camera_head/color/image_raw"),
+            ],
+            condition=IfCondition(LaunchConfiguration("use_camera")),
+        )
+    )
+
+    # Spawn the robot in Gazebo
+    ld.add_action(OpaqueFunction(function=spawn_rover))
+
+    return ld
+
+
+def spawn_rover(context: LaunchContext) -> list[Action]:
+    """Spawn the rover in Gazebo at the requested height."""
+    # Ran at launch time so a bad spawn_z fails here instead of inside Gazebo. Keep the
+    # model above the ground plane: anything that starts underground stalls Gazebo for
+    # ~20 s, making the controllers time out before Gazebo runs its first update.
+    spawn_z = LaunchConfiguration("spawn_z").perform(context)
+    try:
+        float(spawn_z)
+    except ValueError:
+        raise RuntimeError(f"spawn_z must be a number in meters, got '{spawn_z}'")
+
+    gz_args = [
+        ("-topic", "/robot_description"),
+        ("-name", "core_rover"),
+        ("-allow_renaming", "true"),
+        ("-x", "0.0"),
+        ("-y", "0.0"),
+        ("-z", spawn_z),
+        ("-R", "0.0"),
+        ("-P", "0.0"),
+        ("-Y", "0.0"),
+    ]
+    return [
+        Node(
+            package="ros_gz_sim",
+            executable="create",
+            output="screen",
+            arguments=sum(gz_args, ()),  # ROS2 requires flat list for shell args
+        )
+    ]

@@ -10,7 +10,11 @@ COPY --chown=ubuntu:ubuntu --parents ../**/package.xml /home/ubuntu/ros2_ws/src/
 USER ubuntu
 RUN rosdep update
 USER root
-RUN apt-get update && \
+
+RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && \
     rosdep install --from-paths /home/ubuntu/ros2_ws/src --ignore-src -y
 
 # Build the workspace

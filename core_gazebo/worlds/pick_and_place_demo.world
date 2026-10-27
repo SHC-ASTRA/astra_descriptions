@@ -34,8 +34,8 @@
     </plugin>
 
     <!-- Plugin for GPS/NavSat -->
-    <plugin filename="ignition-gazebo-navsat-system"
-      name="ignition::gazebo::systems::NavSat">
+    <plugin filename="gz-sim-navsat-system"
+      name="gz::sim::systems::NavSat">
     </plugin>
 
     <!-- Optional geodetic reference for NavSat output -->

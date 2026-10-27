@@ -3,8 +3,8 @@
 initial_positions:
   axis_0_joint: 0
   axis_1_joint: 0
-  axis_2_joint: -1.6
+  axis_2_joint: 1.6
   axis_3_joint: 0
-  ef_gripper_left_joint: 0
+  ef_gripper_left_joint: -0.1
   wrist_roll_joint: 0
   wrist_yaw_joint: 0

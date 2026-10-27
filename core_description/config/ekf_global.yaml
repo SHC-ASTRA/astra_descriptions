@@ -1,0 +1,48 @@
+# Config for robot_localization's ekf_node for fusing odometry and IMU data
+# https://docs.ros.org/en/noetic/api/robot_localization/html/state_estimation_nodes.html
+
+# Boolean matrix: X, Y, Z,
+#                 roll, pitch, yaw,
+#                 X˙, Y˙, Z˙,
+#                 roll˙, pitch˙, yaw˙,
+#                 X¨, Y¨, Z¨
+
+ekf_global_node:
+  ros__parameters:
+    frequency: 30.0
+    sensor_timeout: 1.0
+    two_d_mode: true
+    publish_tf: true
+
+    map_frame: map
+    odom_frame: odom
+    base_link_frame: base_link
+    world_frame: map
+
+    # GPS converted to odometry by navsat_transform_node
+    odom0: /odometry/gps
+    odom0_config: [true,  true,  false,
+                   false, false, false,
+                   false, false, false,
+                   false, false, false,
+                   false, false, false]
+    odom0_queue_size: 10
+
+    # Wheel odometry (vx, vy, yaw rate) -- keeps the map-frame estimate moving
+    # smoothly between GPS fixes instead of stalling and jumping. Local estimate
+    # does not get piped into global estimate; EKFs run in parallel.
+    odom1: /core/feedback/wheel_odom
+    odom1_config: [false, false, false,
+                   false, false, false,
+                   true,  true,  false,
+                   false, false, true,
+                   false, false, false]
+    odom1_queue_size: 10
+
+    imu0: /core/feedback/imu/data
+    imu0_config: [false, false, false,
+                  false, false, true,
+                  false, false, false,
+                  false, false, true,
+                  false, false, false]
+    imu0_queue_size: 10

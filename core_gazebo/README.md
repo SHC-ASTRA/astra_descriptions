@@ -75,7 +75,7 @@ $ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r cmd_vel:=/d
 The launch file uses the following nodes and other launch files:
 
 - **robot_state_publisher.launch.py** - Located in `core_description`, publishes the Core URDF on /robot_description and publishes TF data from the joint states provided by either `joint_state_publisher_gui` (for display.launch.py) or Gazebo, and launches RViz to display TF data.
-- **controller_manager** - spawns the necessary ros2 controllers (`joint_broacaster` and `diff_controller`) for Gazebo to translate `/cmd_vel` into wheel velocities and translates JointStates from `joint_broadcaster` into TF data and basic dead reckoned odometry.
+- **controller_manager** - spawns the necessary ros2 controllers (`joint_state_broadcaster` and `diff_controller`) for Gazebo to translate `/cmd_vel` into wheel velocities and translates JointStates from `joint_state_broadcaster` into TF data and basic dead reckoned odometry.
 - **gz_sim.launch.py** - Launches Gazebo Ignition itself.
 - **ros_gz_bridge** - Bridges messages between Gazebo topics (`gz topic -l`) and ROS2 topics (`ros2 topic list`).
 - **ros_gz_sim create** - Spawns the Core URDF inside Gazebo using `/robot_description`.
